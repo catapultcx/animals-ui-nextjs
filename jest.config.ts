@@ -10,7 +10,10 @@ const customJestConfig = {
   testEnvironment: 'jsdom',
   verbose: true,
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  testMatch: ['<rootDir>/__tests__/**/*.test.ts'],
+  testMatch: [
+    '<rootDir>/__tests__/**/*.test.ts',
+    '<rootDir>/__tests__/**/*.test.tsx'
+  ],
   moduleNameMapper: {
     '^@/root(.*)$': '<rootDir>/$1',
     '^@/components/(.*)$': '<rootDir>/src/components/$1',
@@ -20,6 +23,8 @@ const customJestConfig = {
   },
   moduleDirectories: ['node_modules', '<rootDir>'],
   coveragePathIgnorePatterns: [
+    'src/pages/_app.tsx',
+    'src/pages/_document.tsx',
     '__tests__'
   ],
   collectCoverage: true,
