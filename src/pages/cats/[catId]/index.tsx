@@ -5,7 +5,7 @@ import { CatsService } from '@/services/api/cats-service'
 
 const service = new CatsService()
 
-export default function CatsPage({ cat } : {cat: Cat} ) {
+export default function CatPage({ cat } : {cat: Cat} ) {
   return (
     <>
       <Head>
@@ -38,7 +38,6 @@ export default function CatsPage({ cat } : {cat: Cat} ) {
 }
 
 export async function getServerSideProps(context: any) {
-  
     try {
       const cat = await service.get({ id: context?.params?.catId })
       return { props: { cat } }
