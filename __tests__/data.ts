@@ -38,13 +38,5 @@ export const response1 = {
 }
 
 export const session = {
-  user: {
-    t24_customer_id: '183760',
-    moveMoneyState: {
-      fromAccountNumber: '11345678',
-      toAccountNumber: '87654321',
-      transactionType: 'withdraw',
-      amount: '123.12'
-    }
-  }
+  user: { }
 }
