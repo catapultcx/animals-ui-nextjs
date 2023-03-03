@@ -2,6 +2,8 @@ Next.js UI for the animals service.
 
 This is the front end layer to the animals service. It uses the [animals-api](https://github.com/catapultcx/animals-api) to manage data. 
 
+This front end adopts [progressive enhancement](https://en.wikipedia.org/wiki/Progressive_enhancement) through use of SSR and no dependency on Javascript in the browser.
+
 ## Prerequisites
 
 Developers should install the following on their machines:
@@ -23,19 +25,36 @@ Environment variables are defined in the `.env.example` file. This should be cop
 `.env` but NOT commited.
 
 Install the modules
+
 ```bash
 npm install
 ```
 
-## Getting Started
+## Commands
 
-First, run the development server:
+Run the development server locally and then open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run the unit tests
+
+```bash
+npm test
+```
+
+Run the cypress tests (when the server already started)
+
+```bash
+npm run cypress
+```
+
+Run the cypress tests (this will start and stop the server)
+
+```bash
+npm run e2e
+```
 
 ## Learn More
 
@@ -46,7 +65,7 @@ To learn more about the tech used, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Steps to recreate project
+## Steps to Recreate Project
 
 - [Create the NextJS project](https://nextjs.org/docs/getting-started)
 - [Add in React-Bootstrap](https://react-bootstrap.github.io/getting-started/introduction)

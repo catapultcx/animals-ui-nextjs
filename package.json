@@ -8,10 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "e2e": "start-server-and-test dev http://localhost:3000 cypress:run",
-    "cypress:run": "cypress run",
-    "cypress:open": "cypress open",
-    "cypress:clear": "cypress cache clear"
+    "e2e": "start-server-and-test dev http://localhost:3000 cypress",
+    "cypress": "cypress run"
   },
   "dependencies": {
     "@types/node": "18.14.4",
