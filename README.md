@@ -44,7 +44,7 @@ Run the unit tests
 npm test
 ```
 
-Run the cypress tests (when the server already started)
+Run the cypress tests (assuming the server is already started)
 
 ```bash
 npm run cypress
