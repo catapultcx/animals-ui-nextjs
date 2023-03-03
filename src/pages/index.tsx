@@ -16,7 +16,7 @@ export default function HomePage() {
         <h1>Welcome, register your animals</h1>
         <p>
           Get started by managing your cat&nbsp;
-          <a href="/cats">here</a>
+          <a href="cats">here</a>
         </p>
       </main>
     </>
