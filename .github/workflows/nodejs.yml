@@ -10,24 +10,15 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-    # env:
-    #   API_URL: http://localhost:8080/api/1
-    # services:
-    #   animals-api:
-    #     image: catapultcx/animals-api:latest
-    #     ports:
-    #       - 8080:8080
-
     strategy:
       matrix:
         node-version: [18.x]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Jest tests on Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
@@ -36,6 +27,24 @@ jobs:
       env:
         CI: true
 
+  cypress-run:
+    runs-on: ubuntu-latest
+    env:
+      API_URL: http://localhost:8080/api/1
+    services:
+      animals-api:
+        image: catapultcx/animals-api:latest
+        ports:
+          - 8080:8080
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cypress test run
+        uses: cypress-io/github-action@v5.1.0 
+        with:
+          build: npm run build
+          start: npm start 
+  
   deploy:
     name: Deploy my app
     runs-on: ubuntu-latest
