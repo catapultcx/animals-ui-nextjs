@@ -6,28 +6,31 @@ import { useState } from 'react'
 import { CatsService } from '@/services/api/cats-service'
 import { Table } from 'react-bootstrap'
 import { useRouter } from 'next/router'
+import { Cat } from '@/domain/cat'
 
 const service = new CatsService()
+export default function UpdatePage({ cat } : {cat: Cat} ) {
 
-const HomePage = () => {
   const [catName, setCatName] = useState("");
   const [catDescription, setCatDescription] = useState("");
   const [catGroup] = useState("MAMMALS");
   const router = useRouter();
   const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    service.create(catName, catDescription, catGroup)
+    console.log(cat);
+    service.update(cat.id, catName, catDescription, catGroup)
     .then((newAnimal) => {
       console.log('New animal has been created:', newAnimal)
       router.push('/cats');
     })
     .catch((error) => {
-      console.error('Error creating new animal:', error)
+      console.error('Error updating animal:', error)
     })
+
   };
+  const service = new CatsService()
 
   return (
-
     <>
       <Head>
         <title>Register your animal</title>
@@ -36,7 +39,7 @@ const HomePage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Welcome, register your animals</h1>
+        <h1> Update your animals</h1>
 
         <form onSubmit={handleSubmit}>
         <Table striped bordered hover>
@@ -51,6 +54,7 @@ const HomePage = () => {
               className={styles.animalName}
               type="text"
               value={catName}
+              placeholder={cat.name}
               onChange={(e) => setCatName(e.target.value)}
             />
             </td>
@@ -64,12 +68,13 @@ const HomePage = () => {
                 id="catDescription"
                 className={styles.description}
                 value={catDescription}
+                placeholder={cat.description}
                 onChange={(e) => setCatDescription(e.target.value)}
               />
               </td>
             </tr>
           <tr><td colSpan={2}>
-          <button className='btn btn-primary btn-auth0-cta btn-padded btn-block' type="submit">register</button> </td></tr>
+          <button className='btn btn-primary btn-auth0-cta btn-padded btn-block' type="submit">Update</button> </td></tr>
           </tbody>
         </Table>
         </form>
@@ -83,4 +88,13 @@ const HomePage = () => {
   )
 }
 
-export default HomePage;
+export async function getServerSideProps(context: any) {
+  try {
+    const service = new CatsService()
+    const cat = await service.get({ id: context?.params?.catId })
+    return { props: { cat } }
+  } catch (err) {
+    console.log(err)
+    return { notFound: true }
+  }
+}

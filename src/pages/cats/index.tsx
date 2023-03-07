@@ -23,22 +23,25 @@ export default function CatsPage({ cats } : any) {
               <th>#</th>
               <th>Name</th>
               <th>Description</th>
-              <th></th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {cats?.length > 0 &&             
+            {cats?.length > 0 &&
               cats.map((c: Cat) => (
                 <tr key={c.id}>
                   <td>{c.id}</td>
                   <td>{c.name}</td>
                   <td>{c.description}</td>
                   <td>
-                    <Link href={`/cats/${c.id}`} className='btn btn-primary btn-auth0-cta btn-padded'>
+                    <Link href={`/cats/${c.id}`} className='btn btn-primary btn-auth0-cta btn-padded btn-block'>
                       View
                     </Link>
+                    <Link href={`/cats/${c.id}/update`} className='btn btn-warning btn-auth0-cta btn-padded btn-block m-1'>
+                      Edit
+                    </Link>
                   </td>
-                </tr>                
+                </tr>
               ))}
           </tbody>
         </Table>

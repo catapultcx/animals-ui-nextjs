@@ -1,11 +1,27 @@
 import Head from 'next/head'
 import { Cat } from '@/domain/cat'
-import { Table } from 'react-bootstrap'
+import { Button, Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
-
-const service = new CatsService()
+import router from 'next/router'
 
 export default function CatPage({ cat } : {cat: Cat} ) {
+
+  const service = new CatsService()
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    console.log('removing '+ cat.id);
+
+    service.delete(cat.id)
+    .then((newCat) => {
+      console.log('New cat has been registered:', newCat)
+      router.push('/cats');
+    })
+    .catch((error) => {
+      console.error('Error creating new animal:', error)
+    })
+
+  };
+
   return (
     <>
       <Head>
@@ -21,15 +37,25 @@ export default function CatPage({ cat } : {cat: Cat} ) {
             <tr>
               <td>ID</td>
               <td>{cat.id}</td>
-            </tr>             
+            </tr>
             <tr>
               <td>Name</td>
               <td>{cat.name}</td>
-            </tr>             
+            </tr>
             <tr>
               <td>Description</td>
               <td>{cat.description}</td>
-            </tr>                                        
+            </tr>
+            <tr>
+              <td>Action</td>
+              <td>
+              <form onSubmit={handleSubmit}>
+                <Button type="submit" className='btn btn-danger btn-auth0-cta btn-padded btn-block m-1'>
+                  Delete
+                </Button>
+                </form>
+              </td>
+            </tr>
           </tbody>
         </Table>
       </main>
@@ -39,6 +65,7 @@ export default function CatPage({ cat } : {cat: Cat} ) {
 
 export async function getServerSideProps(context: any) {
     try {
+      const service = new CatsService()
       const cat = await service.get({ id: context?.params?.catId })
       return { props: { cat } }
     } catch (err) {

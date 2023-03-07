@@ -6,6 +6,10 @@
   padding: 6rem;
   min-height: 100vh;
 }
+.animalName, .description , .description p,
+.description div {
+  width: 100%;
+}
 
 .description {
   display: inherit;
@@ -13,7 +17,7 @@
   align-items: inherit;
   font-size: 0.85rem;
   max-width: var(--max-width);
-  width: 100%;
+  height: 30vb;
   z-index: 2;
   font-family: var(--font-mono);
 }
@@ -216,7 +220,6 @@
     display: flex;
     justify-content: center;
     position: fixed;
-    width: 100%;
   }
 
   .description p {
