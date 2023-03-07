@@ -34,7 +34,7 @@ export default function UpdatePage({ cat } : {cat: Cat} ) {
     <>
       <Head>
         <title>Register your animal</title>
-        <meta name="description" content="Register your animal" />
+        <meta name="description" content="Update your animal" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

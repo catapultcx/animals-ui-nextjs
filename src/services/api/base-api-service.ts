@@ -1,3 +1,4 @@
+import { Cat } from '@/domain/cat';
 import axios from 'axios'
 
 export abstract class BaseAPIService {
@@ -18,8 +19,9 @@ export abstract class BaseAPIService {
     throw error
   }
 
-  async _fetchGET (url: string) {
-    const response = await axios.get(this.baseUrl + url)
+  async _fetchGET (url: string, params : string) {
+    console.log(`${this.baseUrl + url}?${params}`);
+    const response = await axios.get(`${this.baseUrl + url}?${params}`)
     return response.data
   }
 

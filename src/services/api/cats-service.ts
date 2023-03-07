@@ -1,16 +1,19 @@
 import { Cat } from '@/domain/cat'
 import { BaseAPIService } from './base-api-service'
 interface GetCommand {
-  id: string
+  id: string | undefined
 }
 export class CatsService extends BaseAPIService {
 
   async get (params: GetCommand): Promise<Cat | null> {
-    return await this._fetchGET(`/cats/${params.id}`)
+    return await this._fetchGET(`/cats/${params.id}`, {})
   }
 
-  async all(): Promise<{ cats: Cat[] } | null> {
-    return await this._fetchGET(`/cats`)
+  async all(params?: any): Promise<any | null> {
+    const { name, description } = params || {}
+    let url = `/cats`
+    console.log('all', params);
+    return this._fetchGET(url, params)
   }
 
   async create(name: string, description: string, group: string): Promise<Cat | null> {
@@ -27,7 +30,6 @@ export class CatsService extends BaseAPIService {
       description,
       group
     })
-
   }
 
 }
