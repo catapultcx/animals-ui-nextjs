@@ -4,13 +4,12 @@ import { Button, Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 import router from 'next/router'
 
+const service = new CatsService()
+
 export default function CatPage({ cat } : {cat: Cat} ) {
 
-  const service = new CatsService()
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    console.log('removing '+ cat.id);
-
     service.delete(cat.id)
     .then((newCat) => {
       console.log('New cat has been registered:', newCat)
@@ -25,13 +24,13 @@ export default function CatPage({ cat } : {cat: Cat} ) {
   return (
     <>
       <Head>
-        <title>Your cat {cat.name}</title>
-        <meta name="description" content="Register your animal" />
+        <title>Remove your animal {cat.name}</title>
+        <meta name="description" content="Remove your animal" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Your cat {cat.name}</h1>
+        <h1>{cat.name}</h1>
         <Table striped bordered hover>
           <tbody>
             <tr>
@@ -56,6 +55,9 @@ export default function CatPage({ cat } : {cat: Cat} ) {
                 </form>
               </td>
             </tr>
+
+
+
           </tbody>
         </Table>
       </main>
@@ -65,7 +67,6 @@ export default function CatPage({ cat } : {cat: Cat} ) {
 
 export async function getServerSideProps(context: any) {
     try {
-      const service = new CatsService()
       const cat = await service.get({ id: context?.params?.catId })
       return { props: { cat } }
     } catch (err) {

@@ -5,15 +5,14 @@ interface GetCommand {
 }
 export class CatsService extends BaseAPIService {
 
-  async get (params: GetCommand): Promise<Cat | null> {
-    return await this._fetchGET(`/cats/${params.id}`, {})
+  async get (params: any): Promise<any | null> {
+    console.log("params:")
+    console.log(params.id)
+    return await this._fetchGETbyId(`/cats`, params?.id)
   }
 
   async all(params?: any): Promise<any | null> {
-    const { name, description } = params || {}
-    let url = `/cats`
-    console.log('all', params);
-    return this._fetchGET(url, params)
+    return this._fetchGET(`/cats`, params)
   }
 
   async create(name: string, description: string, group: string): Promise<Cat | null> {

@@ -69,7 +69,7 @@ const HomePage = () => {
               </td>
             </tr>
           <tr><td colSpan={2}>
-          <button className='btn btn-primary btn-auth0-cta btn-padded btn-block' type="submit">register</button> </td></tr>
+          <button className='btn btn-outline-success btn-auth0-cta btn-padded btn-block' type="submit">Register</button> </td></tr>
           </tbody>
         </Table>
         </form>

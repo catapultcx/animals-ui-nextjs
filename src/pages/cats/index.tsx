@@ -41,8 +41,8 @@ export default function CatsPage({ cats }: any) {
         {
         catList?.length === 0 ?
         <>
-        <h2>Sorry not not find what you are looking for! </h2>
-        <button className='rounded p-2 m-1 btn-outline-dark border border-dark' onClick={handleFilter}>Reset Filter</button>
+        <h2><code>Sorry, could not find what you are looking for!</code> </h2>
+        <button className='rounded p-2 btn btn btn-outline-danger mt-5 mb-5' onClick={handleFilter}>Reset Filter</button>
         </>
         :
         catList?.length > 0 &&
@@ -57,7 +57,7 @@ export default function CatsPage({ cats }: any) {
               <th>
                 <input  className='rounded p-2 m-1' placeholder="FILTER BY NAME" type="text" id="filterName" value={filterName} onChange={(event) => setFilterName(event.target.value)} />
                 <input  className='rounded p-2 m-1' placeholder="FILTER BY DESCRIPTION" type="text" id="filterDescription" value={filterDescription} onChange={(event) => setFilterDescription(event.target.value)} />
-                <button className='rounded p-2 m-1 btn-outline-dark border border-dark' onClick={handleFilter}>Click to Filter</button>
+                <button className='rounded p-2 m-1 btn btn-outline-dark' onClick={handleFilter}>Click to Filter</button>
               </th>
             </tr>
           </thead>
@@ -69,10 +69,10 @@ export default function CatsPage({ cats }: any) {
                   <td>{c.name}</td>
                   <td>{c.description}</td>
                   <td>
-                    <Link href={`/cats/${c.id}`} className='btn btn-primary btn-auth0-cta btn-padded btn-block'>
+                    <Link href={`/cats/${c.id}`} className='btn btn-outline-primary btn-auth0-cta btn-padded btn-block'>
                       View
                     </Link>
-                    <Link href={`/cats/${c.id}/update`} className='btn btn-warning btn-auth0-cta btn-padded btn-block m-1'>
+                    <Link href={`/cats/${c.id}/update`} className='btn btn-outline-warning btn-auth0-cta btn-padded btn-block m-1'>
                       Edit
                     </Link>
                   </td>

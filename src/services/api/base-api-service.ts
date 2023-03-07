@@ -19,8 +19,14 @@ export abstract class BaseAPIService {
     throw error
   }
 
+  async _fetchGETbyId (url: string, id : string) {
+    console.log(this.baseUrl + url + encodeURIComponent(id));
+    const response = await axios.get(`${this.baseUrl + url}/${encodeURIComponent(id)}`)
+    return response.data
+  }
+
   async _fetchGET (url: string, params : string) {
-    console.log(`${this.baseUrl + url}?${params}`);
+    console.log(params);
     const response = await axios.get(`${this.baseUrl + url}?${params}`)
     return response.data
   }
