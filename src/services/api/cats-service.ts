@@ -14,9 +14,9 @@ export class CatsService extends BaseAPIService {
     return this._fetchGET(`${this.baseUrl}/cats`)
   }
   async add(cat:Cat):Promise<void>{
-    return await this._fetchPOST(`${this.baseUrl}/cats/`, cat);
+     await this._fetchPOST(`${this.baseUrl}/cats/`, cat);
   }
   async update(cat:Cat):Promise<void>{
-    return await this._fetchPUT(`${this.baseUrl}/cats/`, cat);
+     await this._fetchPUT(`${this.baseUrl}/cats/`, cat);
   }
 }
