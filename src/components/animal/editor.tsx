@@ -30,8 +30,9 @@ const Editor = (props: EditorProps) => {
             }
         }}>
             <Form.Group className="mb-3" >
-                <Form.Label>Name</Form.Label>
+                <Form.Label htmlFor="name-input">Name</Form.Label>
                 <Form.Control as="input" 
+                    id="name-input"
                     placeholder="Enter a name" 
                     value={state.name}
                     onChange={(e)=>{
@@ -41,9 +42,11 @@ const Editor = (props: EditorProps) => {
             </Form.Group>
 
             <Form.Group className="mb-3" >
-                <Form.Label>Description</Form.Label>
+                <Form.Label htmlFor="description-input">Description</Form.Label>
                 <Form.Control as="textarea" 
+                    id="description-input"
                     value={state.description}
+                    aria-label="description"
                     onChange={(e)=>{
                         setState({...state, description:e.target.value});
                      }} 
