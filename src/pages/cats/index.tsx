@@ -3,6 +3,9 @@ import { Cat } from '@/domain/cat'
 import { Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 import Link from 'next/link'
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 
 const service = new CatsService()
 
@@ -16,7 +19,17 @@ export default function CatsPage({ cats } : any) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>View your cats</h1>
+      <Row>
+          <Col>
+            <h1>View your cats</h1>
+          </Col>
+          <Col lg="2">
+               <Link href="/cats/new" className='btn btn-primary btn-auth0-cta btn-padded'>
+                      Add a cat
+                </Link>
+          </Col>
+      </Row>
+        
         <Table striped bordered hover>
           <thead>
             <tr>

@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { Cat } from '@/domain/cat'
 import { Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
-
+import Link from 'next/link'
 const service = new CatsService()
 
 export default function CatPage({ cat } : {cat: Cat} ) {
@@ -29,7 +29,14 @@ export default function CatPage({ cat } : {cat: Cat} ) {
             <tr>
               <td>Description</td>
               <td>{cat.description}</td>
-            </tr>                                        
+            </tr>      
+            <tr>
+              <td colSpan={2}>
+                <Link href={`/cats/${cat.id}/edit`} className='btn btn-primary btn-padded'>
+                      Edit
+                </Link>
+              </td>
+            </tr>                                     
           </tbody>
         </Table>
       </main>
