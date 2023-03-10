@@ -24,6 +24,11 @@ export abstract class BaseAPIService {
   async _fetchPUT (url: string, body:any) {
     return this._doFetchWithBody('PUT', url, body);
   }
+  async _fetchDELETE (url: string) {
+    return await fetch(url, {
+      method:"DELETE"
+    });
+  }
 
   async _doFetchWithBody (method:string, url: string, body:any) {
     

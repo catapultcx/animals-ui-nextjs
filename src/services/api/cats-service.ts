@@ -19,4 +19,8 @@ export class CatsService extends BaseAPIService {
   async update(cat:Cat):Promise<void>{
      await this._fetchPUT(`${this.baseUrl}/cats/`, cat);
   }
+  async delete(id: string) {
+    await this._fetchDELETE(`${this.baseUrl}/cats/${id}`);
+  }
+  
 }
