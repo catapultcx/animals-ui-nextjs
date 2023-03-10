@@ -1,8 +1,11 @@
 import Head from 'next/head'
 import Editor from '@/components/animal/editor';
+import { CatsService } from '@/services/api/cats-service'
+import Router from 'next/router'
+
 
 export default function NewCatPage() {
-
+  const service = new CatsService();
   return (
     <>
       <Head>
@@ -14,10 +17,9 @@ export default function NewCatPage() {
       <main>
           <h1>Add a new cat</h1>
           <Editor 
-                onSave={(name, description)=>{
-              //Hit the save End point
-              console.log({name, description});
-              return Promise.resolve();
+                onSave={async (name, description)=>{
+                  await service.add({name, description});
+                  Router.push('/cats');
           }}></Editor>
       </main>
     </>
