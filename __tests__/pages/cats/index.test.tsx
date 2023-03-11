@@ -67,4 +67,20 @@ describe('Cats Page', () => {
       expect(screen.queryByText("Garfield")).not.toBeInTheDocument();
     });
   });
+
+  it('should display no cats found if no filtered results found', async ()=>{
+    setFetchUpMock([{
+      json: async () => await Promise.resolve([]),
+      ok: true
+    }]);
+    render(<CatsPage cats={testCats}/>);
+
+    fireEvent.change(screen.getByTestId('name-search-input'), {target: {value:'Fubar'}});
+
+    await act(()=>fireEvent.click(screen.getByText("Filter")));
+
+    await waitFor(()=>{
+      expect(screen.getByText("No Cats found")).toBeInTheDocument();
+    });
+  });
 });
