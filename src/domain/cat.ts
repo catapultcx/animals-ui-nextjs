@@ -1,6 +1,6 @@
 export interface Cat {
-  id: string
+  id?: string
   name: string
   description: string
-  group: string
+  group?: string
 }
