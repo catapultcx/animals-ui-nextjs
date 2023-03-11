@@ -1,8 +1,11 @@
 import CatPage, { getServerSideProps } from '@/pages/cats/[catId]/index';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom'
 import { testCat1 } from '__tests__/data';
-import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
+import { setFetchUpMock, setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
+import { act } from 'react-dom/test-utils';
+import Router from 'next/router'
+jest.mock('next/router', ()=> ({push: jest.fn()}));
 
 const validContext = {
   params: { catId: '1' },
@@ -50,5 +53,17 @@ describe('Cat Page', () => {
 
     expect(h1).toBeInTheDocument()
     expect(h1.textContent).toBe('Your cat Smelly')
+  });
+
+  it('should delete cat and redirects to cats page', async () => {
+    setFetchUpMock([{
+      json: async () => await Promise.resolve(),
+      ok: true
+    }]);
+    render(<CatPage cat={testCat1} />)
+    await act(()=>
+       fireEvent.click(screen.getByText("Delete")));
+    expect(Router.push).toHaveBeenCalledWith('/cats')
+
   });
 });
