@@ -41,14 +41,14 @@ export default function CatsPage({ cats } : any) {
                     <Col>
                       <Form.Control as="input" 
                             value={state.name}
-                            id="name-search-input"
+                            data-testid="name-search-input"
                             placeholder="Filter by name"
                             onChange={(e)=>setState({...state, name:e.target.value})}
                             />
                     </Col>
                     <Col>
                       <Form.Control as="input" 
-                          id="desc-search-input"
+                          data-testid="desc-search-input"
                           value={state.desc}
                           placeholder="Filter by description"
                           onChange={(e)=>setState({...state, desc:e.target.value})}
