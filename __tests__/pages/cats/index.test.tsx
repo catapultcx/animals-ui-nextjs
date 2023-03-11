@@ -1,8 +1,8 @@
 import CatsPage, { getServerSideProps } from '@/pages/cats/index';
-import { render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom'
-import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
-import { testCats } from '__tests__/data';
+import { setFetchUpMock, setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
+import { testCat1, testCats } from '__tests__/data';
 
 const validContext = {
   req: {},
@@ -50,5 +50,21 @@ describe('Cats Page', () => {
 
     expect(h1).toBeInTheDocument()
     expect(h1.textContent).toBe('View your cats')
+  });
+
+  it('should display filterd results', async ()=>{
+    setFetchUpMock([{
+      json: async () => await Promise.resolve([testCat1]),
+      ok: true
+    }]);
+    render(<CatsPage cats={testCats}/>);
+
+    fireEvent.change(screen.getByTestId('name-search-input'), {target: {value:'Smelly'}});
+
+    await act(()=>fireEvent.click(screen.getByText("Filter")));
+
+    await waitFor(()=>{
+      expect(screen.queryByText("Garfield")).not.toBeInTheDocument();
+    });
   });
 });
