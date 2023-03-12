@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { Cat } from "@/domain/cat";
 import { Button, Form } from "react-bootstrap";
 import { CatsService } from "@/services/api/cats-service";
@@ -7,7 +7,6 @@ import { CatsService } from "@/services/api/cats-service";
 const service = new CatsService();
 
 export default function CatForm({ cat, mode }: { cat: Cat; mode: number }) {
-  const router = useRouter();
   const [catData, setCatData] = useState<Cat>(cat);
   const [validated, setValidated] = useState(false);
 
@@ -25,7 +24,7 @@ export default function CatForm({ cat, mode }: { cat: Cat; mode: number }) {
         } else {
           await service.add(catData);
         }
-        router.back();
+        Router.back();
       } catch (err) {
         console.log(err);
         return { notFound: true };

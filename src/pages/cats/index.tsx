@@ -12,10 +12,13 @@ import {
 import { CatsService } from "@/services/api/cats-service";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const service = new CatsService();
 
 export default function CatsPage({ cats }: { cats: Cat[] }) {
+  const router = useRouter();
+  const searchString = router?.query?.search || "";
   const [show, setShow] = useState(false);
   const [selectedCat, setSelectedCat] = useState<any>(null);
 
@@ -49,7 +52,7 @@ export default function CatsPage({ cats }: { cats: Cat[] }) {
                   <Form.Control
                     placeholder="Search here"
                     name="search"
-                    // defaultValue={router?.query?.search || ""}
+                    defaultValue={searchString}
                   />
                   <Button variant="secondary" type="submit">
                     Seach
@@ -185,7 +188,7 @@ export async function getServerSideProps(context: any) {
   try {
     const { search = "" } = context?.query || {};
     const cats = await service.all(search);
-    return { props: { cats, search } };
+    return { props: { cats } };
   } catch (err) {
     console.log(err);
     return { notFound: true };
