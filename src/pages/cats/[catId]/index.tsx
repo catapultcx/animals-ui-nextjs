@@ -15,14 +15,14 @@ export default function CatPage({ cat }: { cat: Cat }) {
   return (
     <>
       <Head>
-        <title>{isEdit ? "Edit your cat" : `View your ${cat.name}`}</title>
+        <title>{isEdit ? "Edit your cat" : `Your cat ${cat.name}`}</title>
         <meta name="description" content="Register your animal" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         <div className="d-flex justify-content-between ">
-          <h1>{isEdit ? "Edit your cat" : `View your ${cat.name}`}</h1>
+          <h1>{isEdit ? "Edit your cat" : `Your cat ${cat.name}`}</h1>
           <div className="d-flex align-middle">
             <Button
               variant="link"

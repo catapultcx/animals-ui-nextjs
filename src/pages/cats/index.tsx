@@ -183,7 +183,7 @@ export default function CatsPage({ cats }: { cats: Cat[] }) {
 
 export async function getServerSideProps(context: any) {
   try {
-    const { search = "" } = context.query;
+    const { search = "" } = context?.query || {};
     const cats = await service.all(search);
     return { props: { cats, search } };
   } catch (err) {
