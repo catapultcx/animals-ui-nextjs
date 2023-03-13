@@ -1,14 +1,13 @@
-import CatPage, { getServerSideProps } from "@/pages/cats/[catId]/index";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { testCat1 } from "__tests__/data";
-import { setUpFetchErrorMock, setUpFetchSuccessMock } from "__tests__/utils";
 import mockRouter from "next-router-mock";
+import { setUpFetchErrorMock, setUpFetchSuccessMock } from "__tests__/utils";
+import { testCat1 } from "__tests__/data";
 import "@testing-library/jest-dom";
+import UpdateCatPage, { getServerSideProps } from "@/pages/cats/update/[catId]";
 
 jest.mock("next/router", () => require("next-router-mock"));
 
 const validContext = {
-  params: { catId: "1" },
   req: {},
   res: {}
 };
@@ -18,14 +17,14 @@ const contextMissingParams = {
   res: {}
 };
 
-describe("Cat Page", () => {
+describe("Update Cat Page", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();
   });
 
   it("getServerSideProps should return account property for valid context", async () => {
-    setUpFetchSuccessMock([testCat1]);
+    setUpFetchSuccessMock(testCat1);
 
     const response = await getServerSideProps(validContext as any);
 
@@ -37,7 +36,7 @@ describe("Cat Page", () => {
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
-  it("getServerSideProps should return not found for invalid id", async () => {
+  it("getServerSideProps should return not found for any fetch error", async () => {
     setUpFetchErrorMock("Not found");
 
     const response = await getServerSideProps(contextMissingParams as any);
@@ -47,22 +46,21 @@ describe("Cat Page", () => {
   });
 
   it("should render without crashing", () => {
-    render(<CatPage cat={testCat1} />);
+    render(<UpdateCatPage cat={testCat1} />);
 
     const h1 = screen.getByRole("heading", { level: 1 });
 
     expect(h1).toBeInTheDocument();
-    expect(h1.textContent).toBe("Your cat Smelly");
+    expect(h1.textContent).toBe("Update your Cat info");
   });
 
-  it("should navigate cats page after a successful delete operation", async () => {
-    mockRouter.push("/cats/create");
+  it("should navigate cats page after a successful update operation", async () => {
+    mockRouter.push("/cats/update/1");
     setUpFetchSuccessMock(testCat1);
 
-    render(<CatPage cat={testCat1} />);
+    render(<UpdateCatPage cat={testCat1} />);
 
-    const button = screen.getByRole("button", { name: "Delete" });
-
+    const button = screen.getByRole("button", { name: "Submit" });
     fireEvent.click(button);
 
     await waitFor(() =>
@@ -72,35 +70,17 @@ describe("Cat Page", () => {
     );
   });
 
-  it("should not navigate cats page after a failed delete operation", async () => {
-    mockRouter.push("/cats/create");
+  it("should not navigate cats page after a failed update operation", async () => {
+    mockRouter.push("/cats/update/1");
     setUpFetchErrorMock("some error");
 
-    render(<CatPage cat={testCat1} />);
+    render(<UpdateCatPage cat={testCat1} />);
 
-    const button = screen.getByRole("button", { name: "Delete" });
-
+    const button = screen.getByRole("button", { name: "Submit" });
     fireEvent.click(button);
 
     expect(mockRouter).toMatchObject({
-      pathname: "/cats/create"
+      pathname: "/cats/update/1"
     });
-  });
-
-  it("should navigate cat update page", async () => {
-    mockRouter.push("/cats/1");
-    setUpFetchSuccessMock(testCat1);
-
-    render(<CatPage cat={testCat1} />);
-
-    const button = screen.getByRole("button", { name: "Edit" });
-
-    fireEvent.click(button);
-
-    await waitFor(() =>
-      expect(mockRouter).toMatchObject({
-        pathname: "update/1"
-      })
-    );
   });
 });

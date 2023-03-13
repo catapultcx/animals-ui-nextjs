@@ -50,6 +50,12 @@ export default function CatPage({ cat }: { cat: Cat }) {
           </tbody>
         </Table>
         <Button
+          onClick={() => router.push(`update/${cat.id}`)}
+          className="btn btn-success"
+        >
+          Edit
+        </Button>
+        <Button
           onClick={() => deleteCat(cat.id)}
           className="btn btn-danger m-2"
         >

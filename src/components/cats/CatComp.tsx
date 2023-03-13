@@ -51,7 +51,15 @@ export default function CatComp({ cat }: CatCompProps) {
   };
 
   const updateCat = () => {
-    // TODO: make a call for update cat info
+    service
+      .update({ cat: newCat })
+      .then((resp) => {
+        toast("Cat updated successfully!", { type: "success" });
+        router.push("/cats");
+      })
+      .catch((err) => {
+        toast("Error occured. Please try again later.", { type: "error" });
+      });
   };
 
   return <CatForm cat={newCat} onSubmit={onSubmit} onChange={onChange} />;
