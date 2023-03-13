@@ -28,7 +28,6 @@ export default function CatForm({ cat, onSubmit, onChange }: CatFormProps) {
       <Form.Group className="mb-3">
         <Form.Label htmlFor="catName">Cat Name</Form.Label>
         <Form.Control
-          id="name"
           name="name"
           value={cat.name}
           onChange={onChange}
@@ -45,7 +44,6 @@ export default function CatForm({ cat, onSubmit, onChange }: CatFormProps) {
       <Form.Group className="mb-3">
         <Form.Label htmlFor="catDescription">Cat Description</Form.Label>
         <Form.Control
-          id="description"
           name="description"
           value={cat.description}
           onChange={onChange}

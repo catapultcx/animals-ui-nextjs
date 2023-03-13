@@ -1,12 +1,16 @@
-import Head from 'next/head'
-import { Cat } from '@/domain/cat'
-import { Table } from 'react-bootstrap'
-import { CatsService } from '@/services/api/cats-service'
-import Link from 'next/link'
+import Head from "next/head";
+import { Cat } from "@/domain/cat";
+import { Table } from "react-bootstrap";
+import { CatsService } from "@/services/api/cats-service";
+import Link from "next/link";
+import SearchBar from "@/components/cats/SearchBar";
+import { useState } from "react";
 
-const service = new CatsService()
+const service = new CatsService();
 
-export default function CatsPage({ cats } : any) {
+export default function CatsPage({ cats }: any) {
+  const [catList, setCatlist] = useState(cats);
+
   return (
     <>
       <Head>
@@ -21,6 +25,7 @@ export default function CatsPage({ cats } : any) {
         <Link href="/cats/create" className="btn btn-success mb-2">
           Register your Cat
         </Link>
+        <SearchBar onSearch={setCatlist} />
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -31,32 +36,35 @@ export default function CatsPage({ cats } : any) {
             </tr>
           </thead>
           <tbody>
-            {cats?.length > 0 &&             
-              cats.map((c: Cat) => (
+            {catList?.length > 0 &&
+              catList.map((c: Cat) => (
                 <tr key={c.id}>
                   <td>{c.id}</td>
                   <td>{c.name}</td>
                   <td>{c.description}</td>
                   <td>
-                    <Link href={`/cats/${c.id}`} className='btn btn-primary btn-auth0-cta btn-padded'>
+                    <Link
+                      href={`/cats/${c.id}`}
+                      className="btn btn-primary btn-auth0-cta btn-padded"
+                    >
                       View
                     </Link>
                   </td>
-                </tr>                
+                </tr>
               ))}
           </tbody>
         </Table>
       </main>
     </>
-  )
+  );
 }
 
 export async function getServerSideProps(context: any) {
-    try {
-      const cats = await service.all()
-      return { props: { cats } }
-    } catch (err) {
-      console.log(err)
-      return { notFound: true }
-    }
+  try {
+    const cats = await service.all();
+    return { props: { cats } };
+  } catch (err) {
+    console.log(err);
+    return { notFound: true };
+  }
 }

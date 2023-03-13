@@ -1,7 +1,7 @@
 import CatsPage, { getServerSideProps } from "@/pages/cats/index";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from "__tests__/utils";
-import { testCats } from "__tests__/data";
+import { testCat1, testCat2, testCats } from "__tests__/data";
 import mockRouter from "next-router-mock";
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider";
 import "@testing-library/jest-dom";
@@ -76,5 +76,68 @@ describe("Cats Page", () => {
         pathname: "/cats/create"
       })
     );
+  });
+
+  it("should filter data based on the search criteria (1)", async () => {
+    render(<CatsPage cats={testCats} />);
+    setUpFetchSuccessMock([testCats]);
+
+    const button = screen.getByRole("button", { name: "Search" });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.findByText("Smelly cat")).toBeDefined();
+      expect(screen.findByText("Lazy cat")).toBeDefined();
+    });
+  });
+
+  it("should filter data based on the search criteria (2)", async () => {
+    render(<CatsPage cats={testCats} />);
+    setUpFetchSuccessMock(testCat1);
+
+    const input1 = screen.getByLabelText("cat-name");
+    const button = screen.getByRole("button", { name: "Search" });
+
+    fireEvent.change(input1, { target: { value: "Sme" } });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.queryByText("Lazy cat")).not.toBeInTheDocument();
+    });
+  });
+
+  it("should filter data based on the search criteria (3)", async () => {
+    render(<CatsPage cats={testCats} />);
+    setUpFetchSuccessMock(testCat2);
+
+    const input1 = screen.getByLabelText("cat-name");
+    const input2 = screen.getByLabelText("cat-description");
+    const button = screen.getByRole("button", { name: "Search" });
+
+    fireEvent.change(input1, { target: { value: "Gar" } });
+    fireEvent.change(input2, { target: { value: "Laz" } });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.queryByText("Smelly cat")).not.toBeInTheDocument();
+    });
+  });
+
+  it("should display an error message when search failed", async () => {
+    render(<CatsPage cats={testCats} />);
+    setUpFetchErrorMock("some error");
+
+    const input1 = screen.getByLabelText("cat-name");
+    const input2 = screen.getByLabelText("cat-description");
+    const button = screen.getByRole("button", { name: "Search" });
+
+    fireEvent.change(input1, { target: { value: "Gar" } });
+    fireEvent.change(input2, { target: { value: "Laz" } });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.queryByText("Smelly cat")).toBeInTheDocument();
+      expect(screen.queryByText("Lazy cat")).toBeInTheDocument();
+    });
   });
 });

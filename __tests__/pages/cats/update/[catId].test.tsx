@@ -2,8 +2,8 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from "__tests__/utils";
 import { testCat1 } from "__tests__/data";
-import "@testing-library/jest-dom";
 import UpdateCatPage, { getServerSideProps } from "@/pages/cats/update/[catId]";
+import "@testing-library/jest-dom";
 
 jest.mock("next/router", () => require("next-router-mock"));
 

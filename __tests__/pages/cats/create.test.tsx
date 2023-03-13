@@ -1,12 +1,5 @@
 import CreateCatPage from "@/pages/cats/create";
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  prettyDOM,
-  findByText
-} from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from "__tests__/utils";
 import { testCat1 } from "__tests__/data";

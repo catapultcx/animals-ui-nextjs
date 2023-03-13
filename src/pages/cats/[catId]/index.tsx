@@ -2,7 +2,6 @@ import Head from "next/head";
 import { Cat } from "@/domain/cat";
 import { Button, Table } from "react-bootstrap";
 import { CatsService } from "@/services/api/cats-service";
-import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 

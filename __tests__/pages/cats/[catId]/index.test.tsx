@@ -56,7 +56,7 @@ describe("Cat Page", () => {
   });
 
   it("should navigate cats page after a successful delete operation", async () => {
-    mockRouter.push("/cats/create");
+    mockRouter.push("/cats/1");
     setUpFetchSuccessMock(testCat1);
 
     render(<CatPage cat={testCat1} />);
@@ -73,7 +73,7 @@ describe("Cat Page", () => {
   });
 
   it("should not navigate cats page after a failed delete operation", async () => {
-    mockRouter.push("/cats/create");
+    mockRouter.push("/cats/1");
     setUpFetchErrorMock("some error");
 
     render(<CatPage cat={testCat1} />);
@@ -83,7 +83,7 @@ describe("Cat Page", () => {
     fireEvent.click(button);
 
     expect(mockRouter).toMatchObject({
-      pathname: "/cats/create"
+      pathname: "/cats/1"
     });
   });
 
