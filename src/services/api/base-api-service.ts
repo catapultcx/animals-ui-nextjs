@@ -41,4 +41,8 @@ export abstract class BaseAPIService {
         throw err;
       });
   }
+
+  async _fetchDELETE(url: string) {
+    return await this._fetch(url, { method: "DELETE" });
+  }
 }
