@@ -50,5 +50,6 @@ describe('Cats Page', () => {
 
     expect(h1).toBeInTheDocument()
     expect(h1.textContent).toBe('View your cats')
+    expect(screen.getByText('Register New Cat')).toBeInTheDocument()
   });
 });
