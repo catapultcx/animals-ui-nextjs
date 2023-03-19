@@ -3,9 +3,7 @@ import { Cat } from "@/domain/cat";
 import { Table } from "react-bootstrap";
 import { CatsService } from "@/services/api/cats-service";
 import { Button } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
-import { update } from "cypress/types/lodash";
 import { NewCatForm } from "@/components/NewCatForm";
 
 const service = new CatsService();
@@ -45,11 +43,19 @@ export default function CatPage({ cat }: { cat: Cat }) {
             </tbody>
           </Table>
           <Button variant="contained" color="success" onClick={openForm}>
-            Update Cat Information
+            Edit Cat Information
           </Button>
         </main>
       )) ||
-        (updateInfo && <NewCatForm />)}
+        (updateInfo && (
+          <NewCatForm
+            label="Modify"
+            id={cat.id}
+            name={cat.name}
+            description={cat.description}
+          />
+        ))}
+      )
     </>
   );
 }

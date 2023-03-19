@@ -12,7 +12,6 @@ const service = new CatsService();
 
 export default function CatsPage({ cats }: any) {
   const [catsChanged, setCatsChanged] = useState(false);
-  const [catsData, setCatsData] = useState(cats);
   const [openSnackBar, setOpenSnackBar] = useState(false);
 
   useEffect(() => {
@@ -32,6 +31,10 @@ export default function CatsPage({ cats }: any) {
     setOpenSnackBar(false);
   };
 
+  const openForm = () => {
+    router.push("/submitForm");
+  };
+
   return (
     <>
       <Head>
@@ -42,6 +45,7 @@ export default function CatsPage({ cats }: any) {
       </Head>
       <main>
         <h1>View your cats</h1>
+
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -69,15 +73,16 @@ export default function CatsPage({ cats }: any) {
                   <td>
                     <Button
                       onClick={() => handleDelete(c.id)}
-                      variant="outlined"
+                      variant="contained"
                       startIcon={<DeleteIcon />}
                     >
                       Delete
                     </Button>
                     <Snackbar
                       open={openSnackBar}
-                      autoHideDuration={6000}
+                      autoHideDuration={10000}
                       onClose={handleClose}
+                      anchorOrigin={{ vertical: "top", horizontal: "center" }}
                     >
                       <Alert
                         onClose={handleClose}
@@ -92,6 +97,17 @@ export default function CatsPage({ cats }: any) {
               ))}
           </tbody>
         </Table>
+        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={openForm}
+            style={{ marginLeft: "50px", marginRight: "50px" }}
+          >
+            Add Cat
+          </Button>
+        </div>
       </main>
     </>
   );
