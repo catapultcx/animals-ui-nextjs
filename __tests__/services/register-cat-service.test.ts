@@ -14,7 +14,7 @@ describe('Register Cat Service', () => {
     })
 
     describe('register', () => {
-        it('should register and return an cat', async () => {
+        it('should register and return a cat', async () => {
             setUpFetchSuccessMock([testCat1])
             const  newCat: Cat = {
                 id: '',

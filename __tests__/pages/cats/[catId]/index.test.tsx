@@ -1,8 +1,11 @@
 import CatPage, { getServerSideProps } from '@/pages/cats/[catId]/index';
-import { render, screen } from '@testing-library/react';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom'
 import { testCat1 } from '__tests__/data';
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
+import mockRouter from "next-router-mock";
+
+jest.mock("next/router", () => require("next-router-mock"));
 
 const validContext = {
   params: { catId: '1' },
@@ -50,5 +53,33 @@ describe('Cat Page', () => {
 
     expect(h1).toBeInTheDocument()
     expect(h1.textContent).toBe('Your cat Smelly')
+    const btnDelete = screen.getByRole('button', { name: 'Delete' })
+    expect(btnDelete).toBeInTheDocument()
+  });
+
+  it('should delete cat and navigate to cats page', () => {
+    setUpFetchSuccessMock(testCat1);
+    render(<CatPage cat={testCat1} />)
+    const btnDelete = screen.getByRole('button', { name: 'Delete' })
+    expect(btnDelete).toBeInTheDocument()
+    fireEvent.click(btnDelete);
+    waitFor(() =>
+        expect(mockRouter).toMatchObject({
+          pathname: "/cats"
+        })
+    );
+  });
+
+  it('should stay on cat page when failed to delete', () => {
+    mockRouter.push("/cats/1");
+    setUpFetchErrorMock('Failed to delete cat');
+    render(<CatPage cat={testCat1} />)
+    const btnDelete = screen.getByRole('button', { name: 'Delete' })
+    expect(btnDelete).toBeInTheDocument()
+    fireEvent.click(btnDelete);
+    expect(mockRouter).toMatchObject({
+      pathname: "/cats/1"
+    })
+
   });
 });

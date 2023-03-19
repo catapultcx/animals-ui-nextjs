@@ -34,11 +34,23 @@ export abstract class BaseAPIService {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
-    })
-        .then(this.handleError)
-        .catch((err) => {
-          console.log(err.message);
-          throw err;
-        });
+    }).then(this.handleError)
+      .catch((err) => {
+        console.log(err.message);
+        throw err;
+      });
+  }
+
+  async _fetchDELETE(url: string) {
+    return await fetch(url, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json"
+      }
+    }).then(this.handleError)
+      .catch((err) => {
+        console.log(err.message);
+        throw err;
+      });
   }
 }

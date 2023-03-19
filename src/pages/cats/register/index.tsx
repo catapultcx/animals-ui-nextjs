@@ -16,7 +16,7 @@ export default function RegisterCatPage() {
         service
             .register(cat)
             .then((resp) => {
-                toast(`Cat registered successfully with id ${resp.id}`, {type: "success"});
+                toast(`Cat registered successfully with id ${resp?.id}`, {type: "success"});
                 router.push("/cats");
             })
             .catch((err) => {
