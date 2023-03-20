@@ -10,6 +10,8 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { CatsService } from "@/services/api/cats-service";
 import { useRouter } from "next/router";
+import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 const service = new CatsService();
 
@@ -117,6 +119,9 @@ export const NewCatForm: React.FC<FormFields> = ({
               onClick={handleSubmit}
               size="large"
               style={{ marginTop: "20px", marginBottom: "20px" }}
+              startIcon={
+                label === "Modify" ? <AutoFixHighIcon /> : <AddBoxIcon />
+              }
             >
               {label} Cat
             </Button>

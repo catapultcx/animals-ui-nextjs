@@ -5,6 +5,7 @@ import { CatsService } from "@/services/api/cats-service";
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { NewCatForm } from "@/components/NewCatForm";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 const service = new CatsService();
 
@@ -42,7 +43,12 @@ export default function CatPage({ cat }: { cat: Cat }) {
               </tr>
             </tbody>
           </Table>
-          <Button variant="contained" color="success" onClick={openForm}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={openForm}
+            startIcon={<ModeEditIcon />}
+          >
             Edit Cat Information
           </Button>
         </main>

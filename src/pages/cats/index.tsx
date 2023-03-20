@@ -5,6 +5,8 @@ import { CatsService } from "@/services/api/cats-service";
 import Link from "next/link";
 import { Alert, Button, Snackbar } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PreviewIcon from "@mui/icons-material/Preview";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -25,6 +27,10 @@ export default function CatsPage({ cats }: any) {
     router.push(router.asPath);
     setCatsChanged(true);
     setOpenSnackBar(true);
+  };
+
+  const handleView = (catId: any) => {
+    router.push(`/cats/${catId}`);
   };
 
   const handleClose = () => {
@@ -63,12 +69,13 @@ export default function CatsPage({ cats }: any) {
                   <td>{c.name}</td>
                   <td>{c.description}</td>
                   <td>
-                    <Link
-                      href={`/cats/${c.id}`}
-                      className="btn btn-primary btn-auth0-cta btn-padded"
+                    <Button
+                      onClick={() => handleView(c.id)}
+                      variant="contained"
+                      startIcon={<PreviewIcon />}
                     >
                       View
-                    </Link>
+                    </Button>
                   </td>
                   <td>
                     <Button
@@ -104,6 +111,7 @@ export default function CatsPage({ cats }: any) {
             color="primary"
             onClick={openForm}
             style={{ marginLeft: "50px", marginRight: "50px" }}
+            startIcon={<AddBoxIcon />}
           >
             Add Cat
           </Button>
