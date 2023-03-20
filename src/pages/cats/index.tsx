@@ -15,7 +15,6 @@ export default function CatsPage({ cats } : any) {
   const { push } = useRouter();
 
   const handleCreateNewCat = useCallback((newCat: Cat) => {
-    console.log("base url", apiService.baseUrl);
     apiService.create(newCat).then(() => {
       // refresh the page to show the new list
       location.reload();
