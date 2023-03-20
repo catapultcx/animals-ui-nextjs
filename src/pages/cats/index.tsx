@@ -3,10 +3,27 @@ import { Cat } from '@/domain/cat'
 import { Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 import Link from 'next/link'
+import Filter from "@/components/Filter";
+import {toast} from "react-toastify";
+import {useState} from "react";
 
 const service = new CatsService()
 
-export default function CatsPage({ cats } : any) {
+export default function CatsPage({ allCats } : any) {
+
+  const [cats, setCats] = useState(allCats)
+  const onFilter = (text: string) => {
+      service
+            .filter({text: text})
+            .then((filteredCats) => {
+                toast(`Filtered cats successfully`, {type: "success"});
+                setCats(filteredCats)
+            })
+            .catch((err) => {
+                toast(`Failed to filter cats with error ${err}`, {type: "error"});
+          });
+  };
+
   return (
     <>
       <Head>
@@ -17,9 +34,11 @@ export default function CatsPage({ cats } : any) {
       </Head>
       <main>
         <h1>View your cats</h1>
+
         <Link href={'/cats/register'} className='btn btn-primary btn-auth0-cta btn-padded float-end mb-3'>
             Register New Cat
         </Link>
+         <Filter onFilter={onFilter}/>
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -52,8 +71,8 @@ export default function CatsPage({ cats } : any) {
 
 export async function getServerSideProps(context: any) {
     try {
-      const cats = await service.all()
-      return { props: { cats } }
+      const allCats = await service.all()
+      return { props: { allCats } }
     } catch (err) {
       console.log(err)
       return { notFound: true }

@@ -68,4 +68,31 @@ describe('Cats service', () => {
       expect(fetch).toHaveBeenCalledTimes(1)
     })
   })
+
+  describe('filter', () => {
+    it('should filter cats', async () => {
+      setUpFetchSuccessMock([testCats])
+
+      const results = await getService().filter("cat")
+
+      expect(results).toBeDefined()
+      expect(results?.length).toEqual(2)
+      expect(results[0].id).toEqual('1')
+      expect(results[0].name).toEqual('Smelly')
+      expect(results[0].description).toEqual('Smelly cat')
+      expect(results[0].group).toEqual('Tabby')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    it('should throw an error in filtering', async () => {
+      setUpFetchErrorMock('Not found')
+
+      await expect(getService().filter("Ginger"))
+          .rejects
+          .toThrow('Not found')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+  })
 })

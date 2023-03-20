@@ -1,5 +1,5 @@
 import CatsPage, { getServerSideProps } from '@/pages/cats/index';
-import { render, screen } from '@testing-library/react';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom'
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
 import { testCats } from '__tests__/data';
@@ -27,7 +27,7 @@ describe('Cats Page', () => {
 
     expect(response).toEqual({
       props: {
-        cats: testCats
+        allCats: testCats
       }
     })
     expect(fetch).toHaveBeenCalledTimes(1)
@@ -44,7 +44,7 @@ describe('Cats Page', () => {
 
 
   it('should render without crashing', () => {
-    render(<CatsPage cats={testCats}/>)
+    render(<CatsPage allCats={testCats}/>)
 
     const h1 = screen.getByRole('heading', { level: 1 })
 
@@ -52,4 +52,30 @@ describe('Cats Page', () => {
     expect(h1.textContent).toBe('View your cats')
     expect(screen.getByText('Register New Cat')).toBeInTheDocument()
   });
+
+  it('should filter cats', () => {
+    setUpFetchSuccessMock([testCats])
+    render(<CatsPage allCats={testCats}/>)
+    const  inputText = screen.getByPlaceholderText('Enter text to filter cat by name or description');
+    const  btnFilter = screen.getByText('Filter');
+
+    fireEvent.change(inputText, { target: { value: "Smelly" } })
+    fireEvent.click(btnFilter);
+
+    waitFor(() => {
+      expect(screen.findByText("Smelly cat")).toBeDefined();
+    });
+
+  });
+
+  it('should fail to filter cats', () => {
+    setUpFetchErrorMock('Failed to filter');
+    render(<CatsPage allCats={testCats}/>)
+    const  inputText = screen.getByPlaceholderText('Enter text to filter cat by name or description');
+    const  btnFilter = screen.getByText('Filter');
+
+    fireEvent.change(inputText, { target: { value: "Smelly" } })
+    fireEvent.click(btnFilter);
+  });
+
 });
