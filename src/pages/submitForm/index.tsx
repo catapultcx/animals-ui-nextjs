@@ -2,7 +2,8 @@ import React, { useReducer, useState } from "react";
 import { NewCatForm } from "@/components/NewCatForm";
 import Head from "next/head";
 
-const submitForm = () => {
+// A resuable form.
+const createNewCat = () => {
   return (
     <>
       <Head>
@@ -16,4 +17,4 @@ const submitForm = () => {
   );
 };
 
-export default submitForm;
+export default createNewCat;

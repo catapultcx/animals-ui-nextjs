@@ -27,21 +27,42 @@ export abstract class BaseAPIService {
       });
   }
 
-  async _delete(url: string, params: any) {
-    return await fetch(url, params)
-      .then(this.handleError)
-      .catch((err) => {
-        console.log(err.message);
-        throw err;
-      });
+  async _delete(url: string, params: RequestInit) {
+    try {
+      const response = await fetch(url, params);
+      if (!response?.ok) {
+        //throw new Error("HTTP error! status");
+      }
+      return response?.json;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 
-  async _create(url: string, params: any) {
-    return await fetch(url, params)
-      .then(this.handleError)
-      .catch((err) => {
-        console.log(err.message);
-        throw err;
-      });
+  async _create(url: string, params: RequestInit) {
+    try {
+      const response = await fetch(url, params);
+      if (!response.ok) {
+        // throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response?.json();
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async _update(url: string, params: RequestInit) {
+    try {
+      const response = await fetch(url, params);
+      if (!response.ok) {
+        // throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 }

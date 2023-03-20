@@ -48,14 +48,25 @@ export const NewCatForm: React.FC<FormFields> = ({
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    service.create({
-      id: fieldValues.id,
-      name: fieldValues.name,
-      description: fieldValues.description,
-      group: fieldValues.group,
-    });
-    setOpenSnackBar(true);
-    router.push({ pathname: "/cats" });
+    if (label === "Modify") {
+      service.update({
+        id: fieldValues.id,
+        name: fieldValues.name,
+        description: fieldValues.description,
+        group: fieldValues.group,
+      });
+      setOpenSnackBar(true);
+      router.push({ pathname: "/cats" });
+    } else {
+      service.create({
+        id: fieldValues.id,
+        name: fieldValues.name,
+        description: fieldValues.description,
+        group: fieldValues.group,
+      });
+      setOpenSnackBar(true);
+      router.push({ pathname: "/cats" });
+    }
   };
 
   return (

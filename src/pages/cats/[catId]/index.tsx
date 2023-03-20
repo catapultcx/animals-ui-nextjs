@@ -55,7 +55,6 @@ export default function CatPage({ cat }: { cat: Cat }) {
             description={cat.description}
           />
         ))}
-      )
     </>
   );
 }
