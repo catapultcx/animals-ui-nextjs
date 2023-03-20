@@ -1,11 +1,20 @@
 import Head from 'next/head'
 import { Cat } from '@/domain/cat'
-import { Table } from 'react-bootstrap'
+import { Form, Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
+import { ViewCat } from '@/components/ViewCat';
+import { MutateCat } from '@/components/MutateCat';
+import { useCallback } from 'react';
 
-const service = new CatsService()
+const service = new CatsService();
 
-export default function CatPage({ cat } : {cat: Cat} ) {
+export default function CatPage({ cat, isEdit } : {cat: Cat, isEdit: boolean} ) {
+  const handleCatUpdate = useCallback((newCat: Cat) => {
+    service._fetchPUT(newCat.id, newCat).then(() => {
+      console.log('cat has been updated successfully');
+    }).catch(console.error);
+  }, []);
+  
   return (
     <>
       <Head>
@@ -16,22 +25,9 @@ export default function CatPage({ cat } : {cat: Cat} ) {
       </Head>
       <main>
         <h1>Your cat {cat.name}</h1>
-        <Table striped bordered hover>
-          <tbody>
-            <tr>
-              <td>ID</td>
-              <td>{cat.id}</td>
-            </tr>             
-            <tr>
-              <td>Name</td>
-              <td>{cat.name}</td>
-            </tr>             
-            <tr>
-              <td>Description</td>
-              <td>{cat.description}</td>
-            </tr>                                        
-          </tbody>
-        </Table>
+        {
+          isEdit ? <MutateCat cat={cat} btnClickCallback={handleCatUpdate}/> : <ViewCat cat={cat}/>
+        }
       </main>
     </>
   )
@@ -40,7 +36,13 @@ export default function CatPage({ cat } : {cat: Cat} ) {
 export async function getServerSideProps(context: any) {
     try {
       const cat = await service.get({ id: context?.params?.catId })
-      return { props: { cat } }
+      const isEdit = context?.query?.isEdit === 'true';
+      
+      console.log({
+        isEdit,
+        cat,
+      });
+      return { props: { cat, isEdit } }
     } catch (err) {
       console.log(err)
       return { notFound: true }
