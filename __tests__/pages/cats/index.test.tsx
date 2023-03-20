@@ -3,6 +3,9 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom'
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
 import { testCats } from '__tests__/data';
+import {setFetchUpMock} from "../../utils"
+import userEvent from '@testing-library/user-event'
+import {expect, jest} from '@jest/globals'
 
 const validContext = {
   req: {},
@@ -50,5 +53,25 @@ describe('Cats Page', () => {
 
     expect(h1).toBeInTheDocument()
     expect(h1.textContent).toBe('View your cats')
+    expect(screen.getByText('Add a cat')).toBeInTheDocument()
   });
+
+  it('should render cat adding row correctly', () => {
+    const cats = [{ name: ''}, ...testCats]
+    render(<CatsPage cats={cats}/>)
+    expect(screen.getByText('Add')).toBeInTheDocument()
+  })
+
+  it('should render successfully added cat in the list', async () => {
+    const cats = [{ name: ''}, ...testCats]
+    const user = userEvent.setup()
+    render(<CatsPage cats={cats}/>)
+    const resolvedValue = { name: 'Cat name', id: 'Cat id', description: 'Cat description'}
+    screen.getByTestId('name').innerText = resolvedValue.name
+    screen.getByTestId('desc').innerText = resolvedValue.description
+    setFetchUpMock([{ ok: true, json: jest.fn(() => Promise.resolve(resolvedValue)) }])
+    user.click(screen.getByText('Add'))
+    await new Promise((r) => setTimeout(r, 100))
+    expect(screen.queryByTestId('Add-button')).toBeNull()
+  })
 });

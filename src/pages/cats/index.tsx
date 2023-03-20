@@ -1,12 +1,20 @@
 import Head from 'next/head'
 import { Cat } from '@/domain/cat'
-import { Table } from 'react-bootstrap'
+import { Table, Button } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 import Link from 'next/link'
+import styles from '@/styles/Cats.module.scss'
+import { useState } from 'react'
+import { AddCatRow } from '@/components/AddCatRow'
 
 const service = new CatsService()
 
 export default function CatsPage({ cats } : any) {
+  const [catsList, setCatsList] = useState(cats)
+
+  const handleAddCat = () => {
+    setCatsList([{ id: '', name: '', description: ''},...catsList])
+  }
   return (
     <>
       <Head>
@@ -16,7 +24,7 @@ export default function CatsPage({ cats } : any) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>View your cats</h1>
+        <div className={styles.title}><h1>View your cats</h1><Button onClick={handleAddCat}>Add a cat</Button></div>
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -27,19 +35,26 @@ export default function CatsPage({ cats } : any) {
             </tr>
           </thead>
           <tbody>
-            {cats?.length > 0 &&             
-              cats.map((c: Cat) => (
-                <tr key={c.id}>
-                  <td>{c.id}</td>
-                  <td>{c.name}</td>
-                  <td>{c.description}</td>
-                  <td>
-                    <Link href={`/cats/${c.id}`} className='btn btn-primary btn-auth0-cta btn-padded'>
-                      View
-                    </Link>
-                  </td>
-                </tr>                
-              ))}
+            {catsList?.length > 0 &&
+              catsList.map((c: Cat, index: number) => {
+                if (!c.name) {
+                  return <AddCatRow key={index} successHandler={ (cat: Cat) => {
+                    catsList.splice(index, 1)
+                    setCatsList([cat, ...catsList])
+                  } }/>
+              } else return (
+                  <tr key={c.id}>
+                    <td>{c.id}</td>
+                    <td>{c.name}</td>
+                    <td>{c.description}</td>
+                    <td>
+                      <Link href={`/cats/${c.id}`} className='btn btn-primary btn-auth0-cta btn-padded'>
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                )
+              })}
           </tbody>
         </Table>
       </main>
