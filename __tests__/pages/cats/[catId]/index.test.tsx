@@ -55,6 +55,8 @@ describe('Cat Page', () => {
     expect(h1.textContent).toBe('Your cat Smelly')
     const btnDelete = screen.getByRole('button', { name: 'Delete' })
     expect(btnDelete).toBeInTheDocument()
+    const updateLink = screen.getByRole('link', { name: 'Update' })
+    expect(updateLink).toBeInTheDocument()
   });
 
   it('should delete cat and navigate to cats page', () => {
@@ -80,6 +82,18 @@ describe('Cat Page', () => {
     expect(mockRouter).toMatchObject({
       pathname: "/cats/1"
     })
+  });
 
+  it('should navigate to update cat page upon clicking', () => {
+    setUpFetchSuccessMock(testCat1);
+    render(<CatPage cat={testCat1} />)
+    const updateLink = screen.getByRole('link', { name: 'Update' })
+    expect(updateLink).toBeInTheDocument()
+    fireEvent.click(updateLink);
+    waitFor(() =>
+        expect(mockRouter).toMatchObject({
+          pathname: "/cats/1/update"
+        })
+    );
   });
 });

@@ -5,6 +5,7 @@ import { CatsService } from '@/services/api/cats-service'
 import {useRouter} from "next/router";
 import {toast} from "react-toastify";
 import {DeleteCatService} from "@/services/api/delete-cat-service";
+import Link from "next/link";
 
 const catsService = new CatsService()
 const deleteCatService = new DeleteCatService()
@@ -35,7 +36,11 @@ export default function CatPage({ cat } : {cat: Cat} ) {
         <Table striped bordered hover>
             <thead>
             <tr>
-                <th></th>
+                <th>
+                    <Link href={`/cats/${cat.id}/update`} className='btn btn-primary btn-auth0-cta btn-padded float-end'>
+                        Update
+                    </Link>
+                </th>
                 <th>
                     <Button onClick={() => deleteById(cat.id)}
                             className="btn btn-primary btn-auth0-cta btn-padded float-end">

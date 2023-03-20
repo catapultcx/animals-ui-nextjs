@@ -14,6 +14,13 @@ export const testCat2: Cat = {
   group: 'Tabby'
 }
 
+export const testCat1Updated: Cat = {
+  id: '1',
+  name: 'Smelly1',
+  description: 'Smelly cat1',
+  group: 'Tabby'
+}
+
 export const testCats = [testCat1, testCat2]
 
 export const accountError1 = {
