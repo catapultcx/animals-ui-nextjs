@@ -28,7 +28,8 @@ describe('Cat Page', () => {
 
     expect(response).toEqual({
       props: {
-        cat: testCat1
+        cat: testCat1,
+        isEdit: false
       }
     })
     expect(fetch).toHaveBeenCalledTimes(1)

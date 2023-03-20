@@ -1,8 +1,9 @@
 export abstract class BaseAPIService {
   baseUrl: string
 
-  constructor () {
-    this.baseUrl = `${process.env.API_URL}`
+  constructor (baseUrl?: string) {
+
+    this.baseUrl = baseUrl ?? `${process.env.API_URL}`
   }
 
   handleError (response: any) {
@@ -38,10 +39,14 @@ export abstract class BaseAPIService {
   }
 
   async _fetch (url: string, params: any) {
-    return await fetch(url, params)
+    return await fetch(url, {
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then(this.handleError)
       .catch((err) => {
-        console.log(err.message)
         throw err
       })
   }

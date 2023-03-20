@@ -7,15 +7,16 @@ import { useCallback, useState } from 'react'
 import { MutateCat } from '@/components/MutateCat'
 import { useRouter } from 'next/router'
 
-const service = new CatsService()
+const apiService = new CatsService('/api-cats');
 
 export default function CatsPage({ cats } : any) {
   const [ showCreateCat, setShowCreateCat ] = useState<boolean>(false);
   const [ keyWords, setKeyWords ] = useState<string>('');
-  const { push } = useRouter;
+  const { push } = useRouter();
 
   const handleCreateNewCat = useCallback((newCat: Cat) => {
-    service.create(newCat).then(() => {
+    console.log("base url", apiService.baseUrl);
+    apiService.create(newCat).then(() => {
       // refresh the page to show the new list
       location.reload();
     }).catch(console.error);
@@ -23,11 +24,15 @@ export default function CatsPage({ cats } : any) {
 
   const handleSearch = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    push(`/cats/?keyWords=${keyWords}`);
+    push(`/cats/?keywords=${keyWords}`);
   }, [keyWords, push]);
 
+  const handleKeyWordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyWords(e.target.value);
+  }, []);
+
   const handleDelete = useCallback((id: string) => {
-    service.delete(id).then(() => {
+    apiService.delete(id).then(() => {
       location.reload();
     }).catch(console.error);
   }, []);
@@ -42,10 +47,11 @@ export default function CatsPage({ cats } : any) {
       </Head>
       <main>
         <h1>View your cats</h1>
+        <br />
         <Form onSubmit={handleSearch}>
           <Row>
             <Col xs="auto">
-                <Form.Control type="text" placeholder="filer by cat name or description" defaultValue={keyWords} onChange={handleSearch}/>
+                <Form.Control type="text" placeholder="filer by cat name or description" defaultValue={keyWords} onChange={handleKeyWordChange}/>
             </Col>
             <Col xs="auto">
                 <Button variant="primary" type="submit">
@@ -54,6 +60,7 @@ export default function CatsPage({ cats } : any) {
             </Col>
           </Row>
         </Form>
+        <br />
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -78,6 +85,7 @@ export default function CatsPage({ cats } : any) {
                     <Link href={`/cats/${c.id}?isEdit=true`} className='btn btn-primary btn-auth0-cta btn-padded'>
                       Edit
                     </Link>
+                    &nbsp;
                     <Button variant='danger' onClick={() => {
                       handleDelete(c.id);
                     }}>Delete</Button>
@@ -104,11 +112,12 @@ export default function CatsPage({ cats } : any) {
 
 export async function getServerSideProps(context: any) {
     try {
-      const keyWords = context?.query?.keyWords ?? null;
+      const service = new CatsService();
+      const keyWords = context?.query?.keywords ?? null;
       const cats = await service.all(keyWords)
       return { props: { cats } }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       return { notFound: true }
     }
 }

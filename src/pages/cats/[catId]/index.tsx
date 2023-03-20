@@ -6,11 +6,11 @@ import { ViewCat } from '@/components/ViewCat';
 import { MutateCat } from '@/components/MutateCat';
 import { useCallback } from 'react';
 
-const service = new CatsService();
+const apiService = new CatsService('/api-cats');  
 
 export default function CatPage({ cat, isEdit } : {cat: Cat, isEdit: boolean} ) {
   const handleCatUpdate = useCallback((newCat: Cat) => {
-    service._fetchPUT(newCat.id, newCat).then(() => {
+    apiService.update(newCat.id, newCat).then(() => {
       console.log('cat has been updated successfully');
     }).catch(console.error);
   }, []);
@@ -34,17 +34,14 @@ export default function CatPage({ cat, isEdit } : {cat: Cat, isEdit: boolean} ) 
 }
 
 export async function getServerSideProps(context: any) {
-    try {
+  const service = new CatsService();  
+  try {
       const cat = await service.get({ id: context?.params?.catId })
       const isEdit = context?.query?.isEdit === 'true';
       
-      console.log({
-        isEdit,
-        cat,
-      });
       return { props: { cat, isEdit } }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       return { notFound: true }
     }
 }

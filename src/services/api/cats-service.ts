@@ -6,6 +6,9 @@ interface GetCommand {
 }
 
 export class CatsService extends BaseAPIService {
+  constructor(baseUrl?: string) {
+    super(baseUrl);
+  }
   async get (params: GetCommand): Promise<Cat | null> {
     return await this._fetchGET(`${this.baseUrl}/cats/${params.id}`)
   }
@@ -15,7 +18,7 @@ export class CatsService extends BaseAPIService {
   }
 
   async all(keyWords?: string): Promise<{ cats: Cat[] } | null> {
-    return this._fetchGET(`${this.baseUrl}/cats${keyWords ? `keyWords=${keyWords}` : ''}`)
+    return this._fetchGET(`${this.baseUrl}/cats${keyWords ? `?keyWords=${keyWords}` : ''}`)
   }
 
   async update(id: string, cat: Cat): Promise<Cat | null> {

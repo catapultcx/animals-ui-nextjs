@@ -4,6 +4,12 @@ import '@testing-library/jest-dom'
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
 import { testCats } from '__tests__/data';
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    push: jest.fn()
+  }),
+}))
+
 const validContext = {
   req: {},
   res: {}
