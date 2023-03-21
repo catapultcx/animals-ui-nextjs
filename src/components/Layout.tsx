@@ -20,7 +20,7 @@ export default function Layout({ children }: Children)  {
         className='app-wrapper d-flex flex-column h-100'
       >
         <NavBar />
-        <Container className='flex-grow-1 mt-5'>{children}</Container>
+        <Container className='flex-grow-1 mt-5 ps-0 pe-0'>{children}</Container>
         <Footer />
       </main>
     </>
