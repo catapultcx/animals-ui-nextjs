@@ -58,14 +58,12 @@ describe("Cats Page", () => {
     expect(btnRegister).toBeInTheDocument();
   });
 
-  it("should navigate to Registeration page on click of button", () => {
+  it("should navigate to Registeration page on click of register button", () => {
     render(<CatsPage allCats={testCats} />);
 
     const h1 = screen.getByRole("heading", { level: 1 });
     const btnFilter = screen.getByRole("button", { name: "Filter" });
     const btnRegister = screen.getByRole("button", { name: "Register Cat" });
-    const btnDelete = screen.getByRole("columnheader", { name: "Delete" });
-    const btnView = screen.getByRole("columnheader", { name: "View" });
 
     expect(h1).toBeInTheDocument();
     expect(h1.textContent).toBe("View your cats");
@@ -111,7 +109,6 @@ describe("Cats Page", () => {
     const btnFilter = screen.getByRole("button", { name: "Filter" });
     const btnRegister = screen.getByRole("button", { name: "Register Cat" });
     const btnDelete = screen.getByRole("columnheader", { name: "Delete" });
-    const btnView = screen.getByRole("columnheader", { name: "View" });
 
     expect(h1).toBeInTheDocument();
     expect(h1.textContent).toBe("View your cats");

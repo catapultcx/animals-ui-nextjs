@@ -21,7 +21,7 @@ export default function CatsPage({ cats }: any) {
 
   const handleDelete = (catId: any) => {
     service.remove(catId);
-    router.push(router.asPath);
+    router.reload();
     setOpenSnackBar(true);
   };
 
