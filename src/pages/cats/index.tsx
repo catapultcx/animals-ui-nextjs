@@ -1,12 +1,24 @@
 import Head from 'next/head'
 import { Cat } from '@/domain/cat'
-import { Table } from 'react-bootstrap'
+import { Button, Col, Form, Row, Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 import Link from 'next/link'
+import { FormEvent, useState } from "react";
 
 const service = new CatsService()
 
 export default function CatsPage({ cats } : any) {
+
+  const [search, setSearch] = useState<string>("");
+
+  const [searchResult, setSearchResult] = useState<Cat[]>(cats);
+
+  const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const response = await service.all({ search });
+      setSearchResult(response || []);
+  }
+
   return (
     <>
       <Head>
@@ -17,6 +29,19 @@ export default function CatsPage({ cats } : any) {
       </Head>
       <main>
         <h1>View your cats</h1>
+        <Form onSubmit={submitHandler}>
+            <Form.Group as={Row} className="mb-3">
+                <Form.Label column sm={1}>
+                    Search
+                </Form.Label>
+                <Col>
+                    <Form.Control value={search} onChange={(e) => setSearch(e.target.value)} type="text" placeholder="Search by name or description" />
+                </Col>
+                <Col sm={1} className="text-end">
+                    <Button type="submit">Search</Button>
+                </Col>
+            </Form.Group>
+        </Form>
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -27,8 +52,8 @@ export default function CatsPage({ cats } : any) {
             </tr>
           </thead>
           <tbody>
-            {cats?.length > 0 &&             
-              cats.map((c: Cat) => (
+            {searchResult?.length > 0 &&
+              searchResult.map((c: Cat) => (
                 <tr key={c.id}>
                   <td>{c.id}</td>
                   <td>{c.name}</td>

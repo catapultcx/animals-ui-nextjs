@@ -1,9 +1,10 @@
 import CatPage, { getServerSideProps } from '@/pages/cats/[catId]/index';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom'
-import { testCat1 } from '__tests__/data';
+import { testCat1, testCat2, testCats } from '__tests__/data';
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
 import { act } from "react-dom/test-utils";
+import CatsPage from "@/pages/cats";
 
 const validContext = {
   params: { catId: '1' },
@@ -71,6 +72,24 @@ describe('Cat Page', () => {
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(router.push).toHaveBeenCalledWith('/cats');
+
+  });
+
+  it('should filter cats', async () => {
+    setUpFetchSuccessMock([testCat2]);
+
+    const { container } = render(<CatsPage cats={testCats}/>);
+
+    const button = container.querySelector("button[type='submit']");
+
+    const inputSearch = await screen.findByPlaceholderText("Search by name or description");
+
+    await act(() => {
+      fireEvent.change(inputSearch, { target: { value: "smelly" } });
+      button.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+    })
+
+    expect(fetch).toHaveBeenCalledTimes(1);
 
   });
 });
