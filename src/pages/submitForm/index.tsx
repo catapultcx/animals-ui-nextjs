@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from "react";
-import { NewCatForm } from "@/components/NewCatForm";
+import { CatForm } from "../../components/CatForm";
 import Head from "next/head";
 
 // A resuable form.
@@ -12,7 +12,7 @@ const createNewCat = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NewCatForm label={"Add "} id={""} name={""} description={""} />
+      <CatForm label={"Add "} id={""} name={""} description={""} />
     </>
   );
 };

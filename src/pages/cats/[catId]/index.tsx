@@ -1,11 +1,12 @@
 import Head from "next/head";
-import { Cat } from "@/domain/cat";
+import { Cat } from "../../../domain/cat";
 import { Table } from "react-bootstrap";
-import { CatsService } from "@/services/api/cats-service";
+import { CatsService } from "../../../services/api/cats-service";
 import { Button } from "@mui/material";
 import { useState } from "react";
-import { NewCatForm } from "@/components/NewCatForm";
+import { CatForm } from "../../../components/CatForm";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import React from "react";
 
 const service = new CatsService();
 
@@ -54,7 +55,7 @@ export default function CatPage({ cat }: { cat: Cat }) {
         </main>
       )) ||
         (updateInfo && (
-          <NewCatForm
+          <CatForm
             label="Modify"
             id={cat.id}
             name={cat.name}

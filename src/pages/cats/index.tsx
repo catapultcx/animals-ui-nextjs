@@ -1,32 +1,37 @@
 import Head from "next/head";
-import { Cat } from "@/domain/cat";
+import { Cat } from "../../domain/cat";
 import { Table } from "react-bootstrap";
-import { CatsService } from "@/services/api/cats-service";
-import Link from "next/link";
+import { CatsService } from "../../services/api/cats-service";
 import { Alert, Button, Snackbar } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PreviewIcon from "@mui/icons-material/Preview";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
+import React from "react";
+import Filter from "../../components/Filter";
 
 const service = new CatsService();
 
 export default function CatsPage({ cats }: any) {
-  const [catsChanged, setCatsChanged] = useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
-
-  useEffect(() => {
-    setCatsChanged(false);
-  }, [cats]);
+  const [filteredCats, setFilteredCats] = useState(cats);
 
   const router = useRouter();
 
   const handleDelete = (catId: any) => {
     service.remove(catId);
     router.push(router.asPath);
-    setCatsChanged(true);
     setOpenSnackBar(true);
+  };
+
+  const handleCatFilter = (text: string) => {
+    service
+      .filter({ text: text })
+      .then((filteredValues) => {
+        setFilteredCats(filteredValues);
+      })
+      .catch((err) => {});
   };
 
   const handleView = (catId: any) => {
@@ -51,7 +56,7 @@ export default function CatsPage({ cats }: any) {
       </Head>
       <main>
         <h1>View your cats</h1>
-
+        <Filter onFilter={handleCatFilter} />
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -62,8 +67,8 @@ export default function CatsPage({ cats }: any) {
             </tr>
           </thead>
           <tbody>
-            {cats?.length > 0 &&
-              cats.map((c: Cat) => (
+            {filteredCats?.length > 0 &&
+              filteredCats.map((c: Cat) => (
                 <tr key={c.id}>
                   <td>{c.id}</td>
                   <td>{c.name}</td>
@@ -113,7 +118,7 @@ export default function CatsPage({ cats }: any) {
             style={{ marginLeft: "50px", marginRight: "50px" }}
             startIcon={<AddBoxIcon />}
           >
-            Add Cat
+            Register Cat
           </Button>
         </div>
       </main>

@@ -8,7 +8,7 @@ import {
   Alert,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { CatsService } from "@/services/api/cats-service";
+import { CatsService } from "../services/api/cats-service";
 import { useRouter } from "next/router";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -22,7 +22,7 @@ interface FormFields {
   description: string;
 }
 
-export const NewCatForm: React.FC<FormFields> = ({
+export const CatForm: React.FC<FormFields> = ({
   label,
   id,
   name,
@@ -60,7 +60,7 @@ export const NewCatForm: React.FC<FormFields> = ({
       setOpenSnackBar(true);
       router.push({ pathname: "/cats" });
     } else {
-      service.create({
+      service.register({
         id: fieldValues.id,
         name: fieldValues.name,
         description: fieldValues.description,
