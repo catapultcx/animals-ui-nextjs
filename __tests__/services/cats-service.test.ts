@@ -1,5 +1,5 @@
 import { CatsService } from '@/services/api/cats-service'
-import { testCat1, testCats } from '../data'
+import { testCat1, testCat1_without_id, testCats } from '../data'
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '../utils'
 
 // https://github.com/facebook/jest/issues/13834
@@ -18,9 +18,9 @@ describe('Cats service', () => {
 
   describe('get', () => {
     it('should return an cat for valid id', async () => {
-      setUpFetchSuccessMock([testCat1])
+      setUpFetchSuccessMock([ testCat1 ])
 
-      const found = await getService().get({ id:  testCat1.id })
+      const found = await getService().get({ id: testCat1.id })
 
       expect(found).toBeDefined()
       expect(found?.id).toEqual('1')
@@ -29,6 +29,7 @@ describe('Cats service', () => {
       expect(found?.group).toEqual('Tabby')
 
       expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/' + testCat1.id), expect.any(Object))
     })
 
     it('should throw an error for invalid id', async () => {
@@ -39,12 +40,13 @@ describe('Cats service', () => {
         .toThrow('Not found')
 
       expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/' + 'NaN'), expect.any(Object))
     })
   })
 
   describe('all', () => {
     it('should return all cats', async () => {
-      setUpFetchSuccessMock([testCats])
+      setUpFetchSuccessMock([ testCats ])
 
       const results = await getService().all()
 
@@ -56,9 +58,10 @@ describe('Cats service', () => {
       expect(results[0].group).toEqual('Tabby')
 
       expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats'), expect.any(Object))
     })
 
-    it('should throw an error for invalid id', async () => {
+    it('should throw an error if fetch error', async () => {
       setUpFetchErrorMock('Not found')
 
       await expect(getService().all())
@@ -66,6 +69,62 @@ describe('Cats service', () => {
         .toThrow('Not found')
 
       expect(fetch).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('update', () => {
+    it('should update existing cat', async () => {
+      setUpFetchSuccessMock(testCat1)
+
+      const found = await getService().update({ cat: testCat1 })
+
+      expect(found).toBeDefined()
+      expect(found?.id).toEqual('1')
+      expect(found?.name).toEqual('Smelly')
+      expect(found?.description).toEqual('Smelly cat')
+      expect(found?.group).toEqual('Tabby')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/' + testCat1.id), expect.any(Object))
+    })
+
+    it('should throw an error if fetch error', async () => {
+      setUpFetchErrorMock('Not found')
+
+      await expect(getService().update({ cat: testCat1 }))
+        .rejects
+        .toThrow('Not found')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/' + testCat1.id), expect.any(Object))
+    })
+  })
+
+  describe('create', () => {
+    it('should register a new cat', async () => {
+      setUpFetchSuccessMock(testCat1)
+
+      const found = await getService().create({ cat: testCat1_without_id })
+
+      expect(found).toBeDefined()
+      expect(found?.id).toEqual('1')
+      expect(found?.name).toEqual('Smelly')
+      expect(found?.description).toEqual('Smelly cat')
+      expect(found?.group).toEqual('Tabby')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats'), expect.any(Object))
+    })
+
+    it('should throw an error if fetch error', async () => {
+      setUpFetchErrorMock('Not found')
+
+      await expect(getService().create({ cat: testCat1_without_id }))
+        .rejects
+        .toThrow('Not found')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats'), expect.any(Object))
     })
   })
 })

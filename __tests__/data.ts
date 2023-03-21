@@ -7,6 +7,11 @@ export const testCat1: Cat = {
   group: 'Tabby'
 }
 
+export const testCat1_without_id: Cat = {
+  ...testCat1,
+  id: undefined as any
+}
+
 export const testCat2: Cat = {
   id: '2',
   name: 'Garfield',

@@ -1,66 +1,77 @@
-import { Cat } from '@/domain/cat';
-import { CatsService } from '@/services/api/cats-service';
-import { OnCancel, OnChange, OnSubmit } from './CatFormActions';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import CatForm from './CatForm';
+import { Cat } from '@/domain/cat'
+import { CatsService } from '@/services/api/cats-service'
+import { OnCancel, OnChange, OnSubmit } from './CatFormActions'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
+import CatForm from './CatForm'
 
-interface CatCompProps {
-  cat?: Cat;
+interface CatComponentProps {
+  cat?: Cat
 }
 
-const service = new CatsService();
+const service = new CatsService()
 
-export default function CatComp ({cat}: CatCompProps) {
-  const [newCat, setNewCat] = useState<Cat>(
+export default function CatComp ({ cat }: CatComponentProps) {
+  const [ newCat, setNewCat ] = useState<Cat>(
     cat || {
-      id: '',
+      id: undefined as any,
       name: '',
       description: '',
-      group: ''
+      group: 'MAMMALS'
     }
-  );
+  )
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const onChange: OnChange = ({target}: any) => {
-    const {name, value} = target;
+  const onChange: OnChange = ({ target }: any) => {
+    const { name, value } = target
     setNewCat((prevState: Cat) => {
-      return {...prevState, [name]: value};
-    });
-  };
+      return { ...prevState, [name]: value }
+    })
+  }
 
   const onSubmit: OnSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     if (event.currentTarget.checkValidity()) {
       if (newCat.id) {
-        updateCat();
+        updateCat()
       } else {
-        router.push('/cats')
+        createCat()
       }
     }
-  };
+  }
 
   const onCancel: OnCancel = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     if (newCat.id) {
-      router.push(`/cats/${newCat.id}`)
+      router.push(`/cats/${ newCat.id }`)
     } else {
       router.push('/cats')
     }
-  };
+  }
 
   const updateCat = () => {
     service
       .update({ cat: newCat })
       .then(() => {
-        router.push("/cats");
+        router.push('/cats')
       })
       .catch((err) => {
         console.log(err)
-      });
-  };
+      })
+  }
 
-  return <CatForm cat={newCat} onSubmit={onSubmit} onChange={onChange} onCancel={onCancel}/>;
+  const createCat = () => {
+    service
+      .create({ cat: newCat })
+      .then(() => {
+        router.push('/cats')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  return <CatForm cat={ newCat } onSubmit={ onSubmit } onChange={ onChange } onCancel={ onCancel }/>
 }

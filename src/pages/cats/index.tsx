@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { Cat } from '@/domain/cat'
-import { Button, Table } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 import Link from 'next/link'
 
@@ -17,10 +17,11 @@ export default function CatsPage ({ cats }: any) {
       </Head>
       <main>
         <h1>View your cats</h1>
+        <Link href="/cats/create" className="btn btn-success my-sm-3">Register a new Cat</Link>
         <Table striped bordered hover>
           <thead>
           <tr>
-            <th>#</th>
+            <th>ID</th>
             <th>Name</th>
             <th>Description</th>
             <th></th>
@@ -47,12 +48,12 @@ export default function CatsPage ({ cats }: any) {
   )
 }
 
-export async function getServerSideProps(context: any) {
-    try {
-      const cats = await service.all()
-      return { props: { cats } }
-    } catch (err) {
-      console.log(err)
-      return { notFound: true }
-    }
+export async function getServerSideProps (context: any) {
+  try {
+    const cats = await service.all()
+    return { props: { cats } }
+  } catch (err) {
+    console.log(err)
+    return { notFound: true }
+  }
 }
