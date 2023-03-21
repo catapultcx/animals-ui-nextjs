@@ -1,5 +1,5 @@
 import CatsPage, { getServerSideProps } from '@/pages/cats/index';
-import { render, screen } from '@testing-library/react';
+import {fireEvent, render, screen, waitForElementToBeRemoved} from '@testing-library/react';
 import '@testing-library/jest-dom'
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
 import { testCats } from '__tests__/data';
@@ -50,5 +50,21 @@ describe('Cats Page', () => {
 
     expect(h1).toBeInTheDocument()
     expect(h1.textContent).toBe('View your cats')
+  });
+
+  it('should close error message if dismissed', async () => {
+    setUpFetchErrorMock('Not found')
+
+    render(<CatsPage cats={testCats}/>)
+
+    await screen.findByRole('button', { name: 'Reset' })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Reset' }))
+
+    await screen.findByRole('button', { name: 'Close alert' })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Close alert' }))
+
+    await waitForElementToBeRemoved(screen.getByText('An error occurred'))
   });
 });

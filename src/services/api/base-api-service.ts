@@ -13,8 +13,8 @@ export abstract class BaseAPIService {
     }
   }
 
-  async _fetchGET (url: string) {
-    return await this._fetch(url, {})
+  async _fetchGET(url: string, queryParameters?: string[][]) {
+    return await this._fetch(url, queryParameters)
   }
 
   async _fetchPOST(url: string, data: any) {
@@ -55,8 +55,12 @@ export abstract class BaseAPIService {
       })
   }
 
-  async _fetch (url: string, params: any) {
-    return await fetch(url, params)
+  async _fetch(url: string, queryParameters?: string[][]) {
+    const fetchUrl = (queryParameters === undefined || queryParameters.length == 0)
+      ? url
+      : `${url}?${new URLSearchParams(queryParameters).toString()}`
+
+    return await fetch(fetchUrl, {})
       .then(this.handleError)
       .catch((err) => {
         console.log(err.message)

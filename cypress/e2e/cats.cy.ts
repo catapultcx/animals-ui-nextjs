@@ -19,6 +19,15 @@ describe('Cats', () => {
       cy.get('h1').contains('Register cat')
     })
 
+    it('should navigate to view cat page when clicking view button', () => {
+      cy.visit('http://localhost:3000/cats')
+
+      // Click 'View' button for first cat
+      cy.get('.table > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(4) > a:nth-child(1)').click()
+
+      cy.get('h1').contains('Your cat')
+    })
+
     it('should navigate to view your cats page when cat is deleted', () => {
       cy.visit('http://localhost:3000/cats')
 

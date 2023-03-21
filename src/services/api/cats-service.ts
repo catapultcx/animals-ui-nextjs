@@ -34,7 +34,7 @@ export class CatsService extends BaseAPIService {
     return await this._fetchDELETE(`${this.baseUrl}/cats/${params.id}`)
   }
 
-  async all(): Promise<{ cats: Cat[] } | null> {
-    return this._fetchGET(`${this.baseUrl}/cats`)
+  async all(queryParameters?: string[][]): Promise<{ cats: Cat[] } | null> {
+    return this._fetchGET(`${this.baseUrl}/cats`, queryParameters)
   }
 }

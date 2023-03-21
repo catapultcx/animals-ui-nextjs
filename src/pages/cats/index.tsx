@@ -6,10 +6,17 @@ import Link from 'next/link'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import SearchBar from '../../components/SearchBar'
+import Alert from 'react-bootstrap/Alert'
+import {useState} from 'react'
 
 const service = new CatsService()
 
 export default function CatsPage({ cats } : any) {
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const [catList, setCatList] = useState(cats)
+
   return (
     <>
       <Head>
@@ -19,7 +26,12 @@ export default function CatsPage({ cats } : any) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-
+        <Alert variant="danger" dismissible show={errorMessage.length != 0} onClose={() => {setErrorMessage('')}}>
+          <Alert.Heading>An error occurred</Alert.Heading>
+          <p>
+            {errorMessage}
+          </p>
+        </Alert>
         <Container className={'ps-0 pe-0'}>
           <Row className={'align-items-center'}>
             <Col lg={true}>
@@ -31,32 +43,37 @@ export default function CatsPage({ cats } : any) {
               </Link>
             </Col>
           </Row>
+          <Row className="align-items-center">
+            <SearchBar onSearch={setCatList} onError={setErrorMessage}/>
+          </Row>
         </Container>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {cats?.length > 0 &&             
-              cats.map((c: Cat) => (
-                <tr key={c.id}>
-                  <td>{c.id}</td>
-                  <td>{c.name}</td>
-                  <td>{c.description}</td>
-                  <td>
-                    <Link href={`/cats/${c.id}`} className='btn btn-primary btn-auth0-cta btn-padded'>
-                      View
-                    </Link>
-                  </td>
-                </tr>                
-              ))}
-          </tbody>
-        </Table>
+
+        {catList?.length > 0 &&
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            {catList.map((c: Cat) => (
+              <tr key={c.id}>
+                <td>{c.id}</td>
+                <td>{c.name}</td>
+                <td>{c.description}</td>
+                <td>
+                  <Link href={`/cats/${c.id}`} className='btn btn-primary btn-auth0-cta btn-padded'>
+                    View
+                  </Link>
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </Table>
+        }
       </main>
     </>
   )
