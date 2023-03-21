@@ -17,6 +17,10 @@ export abstract class BaseAPIService {
     return await this._fetch(url, {})
   }
 
+  async _fetchDELETE (url: string) {
+    return await this._fetch(url, { method: 'DELETE' })
+  }
+
   async _fetchPOST<T> (url: string, req: T) {
     let response = await this._fetch(url, {
       headers: {

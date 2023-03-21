@@ -17,4 +17,8 @@ export class CatsService extends BaseAPIService {
   async create(request: Cat): Promise<Cat | null> {
     return this._fetchPOST<Cat>(`${this.baseUrl}/cats`, request)
   }
+
+  async delete(params: GetCommand): Promise<void> {
+    return this._fetchDELETE(`${this.baseUrl}/cats/${params.id}`)
+  }
 }
