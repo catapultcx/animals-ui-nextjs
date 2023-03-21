@@ -3,10 +3,13 @@ import { Cat } from '@/domain/cat'
 import { Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 import Link from 'next/link'
+import FilterComponent from '@/components/cat/FilterComponent';
+import { useState } from 'react';
 
 const service = new CatsService()
 
 export default function CatsPage ({ cats }: any) {
+  const [ catList, setCatlist ] = useState(cats);
   return (
     <>
       <Head>
@@ -17,7 +20,14 @@ export default function CatsPage ({ cats }: any) {
       </Head>
       <main>
         <h1>View your cats</h1>
-        <Link href="/cats/create" className="btn btn-success my-sm-3">Register a new Cat</Link>
+        <div className="d-sm-flex mt-sm-3 mb-sm-2">
+          <div className="col-6">
+            <Link href="/cats/create" className="btn btn-success">Register a new Cat</Link>
+          </div>
+          <div className="col-9">
+            <FilterComponent onFilter={ setCatlist }/>
+          </div>
+        </div>
         <Table striped bordered hover>
           <thead>
           <tr>
@@ -28,8 +38,8 @@ export default function CatsPage ({ cats }: any) {
           </tr>
           </thead>
           <tbody>
-          { cats?.length > 0 &&
-            cats.map((c: Cat) => (
+          { catList?.length > 0 &&
+            catList.map((c: Cat) => (
               <tr key={ c.id }>
                 <td>{ c.id }</td>
                 <td>{ c.name }</td>

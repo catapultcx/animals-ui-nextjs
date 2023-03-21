@@ -42,7 +42,6 @@ describe('Cats Page', () => {
     expect(fetch).toHaveBeenCalledTimes(1)
   })
 
-
   it('should render without crashing', () => {
     render(<CatsPage cats={ testCats }/>)
 
@@ -50,5 +49,11 @@ describe('Cats Page', () => {
 
     expect(h1).toBeInTheDocument()
     expect(h1.textContent).toBe('View your cats')
+  })
+
+  it('should have filter component', () => {
+    render(<CatsPage cats={ testCats }/>)
+
+    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument()
   })
 })

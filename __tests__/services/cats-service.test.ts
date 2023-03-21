@@ -1,5 +1,5 @@
 import { CatsService } from '@/services/api/cats-service'
-import { testCat1, testCat1_without_id, testCats } from '../data'
+import { accountError1, testCat1, testCat1_without_id, testCats } from '../data'
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '../utils'
 
 // https://github.com/facebook/jest/issues/13834
@@ -33,7 +33,7 @@ describe('Cats service', () => {
     })
 
     it('should throw an error for invalid id', async () => {
-      setUpFetchErrorMock('Not found')
+      setUpFetchErrorMock(accountError1.statusText)
 
       await expect(getService().get({ id: 'NaN' }))
         .rejects
@@ -62,7 +62,7 @@ describe('Cats service', () => {
     })
 
     it('should throw an error if fetch error', async () => {
-      setUpFetchErrorMock('Not found')
+      setUpFetchErrorMock(accountError1.statusText)
 
       await expect(getService().all())
         .rejects
@@ -89,7 +89,7 @@ describe('Cats service', () => {
     })
 
     it('should throw an error if fetch error', async () => {
-      setUpFetchErrorMock('Not found')
+      setUpFetchErrorMock(accountError1.statusText)
 
       await expect(getService().update({ cat: testCat1 }))
         .rejects
@@ -117,7 +117,7 @@ describe('Cats service', () => {
     })
 
     it('should throw an error if fetch error', async () => {
-      setUpFetchErrorMock('Not found')
+      setUpFetchErrorMock(accountError1.statusText)
 
       await expect(getService().create({ cat: testCat1_without_id }))
         .rejects
@@ -145,7 +145,7 @@ describe('Cats service', () => {
     })
 
     it('should throw an error if fetch error', async () => {
-      setUpFetchErrorMock('Not found')
+      setUpFetchErrorMock(accountError1.statusText)
 
       await expect(getService().delete({ cat: testCat1.id }))
         .rejects
@@ -155,4 +155,34 @@ describe('Cats service', () => {
       expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats'), expect.any(Object))
     })
   })
+
+  describe('filter', () => {
+    it('should return filtered cats', async () => {
+      setUpFetchSuccessMock([[testCat1]])
+
+      const filtered = await getService().filter({ query: 'tom' })
+
+      expect(filtered).toBeDefined()
+      expect(filtered?.length).toEqual(1)
+      expect(filtered[0].id).toEqual('1')
+      expect(filtered[0].name).toEqual('Smelly')
+      expect(filtered[0].description).toEqual('Smelly cat')
+      expect(filtered[0].group).toEqual('Tabby')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/filter?query=tom'), expect.any(Object))
+    })
+
+    it('should fail on return filtered cats', async () => {
+      setUpFetchErrorMock(accountError1.statusText)
+
+      await expect(getService().filter({ query: 'tom' }))
+        .rejects
+        .toThrow('Not found')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/filter?query=tom'), expect.any(Object))
+    })
+  })
+
 })

@@ -1,7 +1,7 @@
 import CatPage, { getServerSideProps } from '@/pages/cats/[catId]/index'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { testCat1 } from '__tests__/data'
+import { accountError1, testCat1 } from '__tests__/data'
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils'
 import mockRouter from 'next-router-mock'
 
@@ -38,7 +38,7 @@ describe('Cat Page', () => {
   })
 
   it('getServerSideProps should return not found for invalid id', async () => {
-    setUpFetchErrorMock('Not found')
+    setUpFetchErrorMock(accountError1.statusText)
 
     const response = await getServerSideProps(contextMissingParams as any)
 

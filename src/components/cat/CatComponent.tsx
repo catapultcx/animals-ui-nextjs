@@ -11,7 +11,7 @@ interface CatComponentProps {
 
 const service = new CatsService()
 
-export default function CatComp ({ cat }: CatComponentProps) {
+export default function CatComponent ({ cat }: CatComponentProps) {
   const [ newCat, setNewCat ] = useState<Cat>(
     cat || {
       id: undefined as any,
