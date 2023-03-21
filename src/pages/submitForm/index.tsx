@@ -3,7 +3,7 @@ import { CatForm } from "../../components/CatForm";
 import Head from "next/head";
 
 // A resuable form.
-const createNewCat = () => {
+export default function SubmitForm() {
   return (
     <>
       <Head>
@@ -15,6 +15,4 @@ const createNewCat = () => {
       <CatForm label={"Add "} id={""} name={""} description={""} />
     </>
   );
-};
-
-export default createNewCat;
+}

@@ -63,7 +63,8 @@ export default function CatsPage({ cats }: any) {
               <th>#</th>
               <th>Name</th>
               <th>Description</th>
-              <th></th>
+              <th>View</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>

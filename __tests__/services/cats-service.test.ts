@@ -1,3 +1,4 @@
+import { Cat } from "@/domain/cat";
 import { CatsService } from "../../src/services/api/cats-service";
 import { testCat1, testCats } from "../data";
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from "../utils";
@@ -86,8 +87,8 @@ describe("Cats service for CRUD operations", () => {
 
       expect(addedCat).toBeDefined();
       expect(addedCat?.id).toEqual("1");
-      expect(addedCat?.name).toEqual("Another crazy cat");
-      expect(addedCat?.description).toEqual("This one is really crazy");
+      expect(addedCat?.name).toEqual("Smelly");
+      expect(addedCat?.description).toEqual("Smelly cat");
       expect(addedCat?.group).toEqual("Tabby");
 
       expect(fetch).toHaveBeenCalledTimes(1);

@@ -30,7 +30,7 @@ describe("Cats Page", () => {
 
     expect(response).toEqual({
       props: {
-        allCats: testCats,
+        cats: testCats,
       },
     });
     expect(fetch).toHaveBeenCalledTimes(1);
@@ -49,9 +49,109 @@ describe("Cats Page", () => {
     render(<CatsPage allCats={testCats} />);
 
     const h1 = screen.getByRole("heading", { level: 1 });
+    const btnFilter = screen.getByRole("button", { name: "Filter" });
+    const btnRegister = screen.getByRole("button", { name: "Register Cat" });
 
     expect(h1).toBeInTheDocument();
     expect(h1.textContent).toBe("View your cats");
-    expect(screen.getByText("Register New Cat")).toBeInTheDocument();
+    expect(btnFilter).toBeInTheDocument();
+    expect(btnRegister).toBeInTheDocument();
+  });
+
+  it("should navigate to Registeration page on click of button", () => {
+    render(<CatsPage allCats={testCats} />);
+
+    const h1 = screen.getByRole("heading", { level: 1 });
+    const btnFilter = screen.getByRole("button", { name: "Filter" });
+    const btnRegister = screen.getByRole("button", { name: "Register Cat" });
+    const btnDelete = screen.getByRole("columnheader", { name: "Delete" });
+    const btnView = screen.getByRole("columnheader", { name: "View" });
+
+    expect(h1).toBeInTheDocument();
+    expect(h1.textContent).toBe("View your cats");
+    expect(btnFilter).toBeInTheDocument();
+    expect(btnRegister).toBeInTheDocument();
+
+    fireEvent.click(btnRegister);
+
+    waitFor(() =>
+      expect(mockRouter).toMatchObject({
+        pathname: "/submitForm",
+      })
+    );
+  });
+
+  it("should navigate to Modify Cat details page", () => {
+    render(<CatsPage allCats={testCats} />);
+
+    const h1 = screen.getByRole("heading", { level: 1 });
+    const btnFilter = screen.getByRole("button", { name: "Filter" });
+    const btnRegister = screen.getByRole("button", { name: "Register Cat" });
+    const btnDelete = screen.getByRole("columnheader", { name: "Delete" });
+    const btnView = screen.getByRole("columnheader", { name: "View" });
+
+    expect(h1).toBeInTheDocument();
+    expect(h1.textContent).toBe("View your cats");
+    expect(btnFilter).toBeInTheDocument();
+    expect(btnRegister).toBeInTheDocument();
+
+    fireEvent.click(btnView);
+
+    waitFor(() =>
+      expect(mockRouter).toMatchObject({
+        pathname: "/submitForm",
+      })
+    );
+  });
+
+  it("should delete the selected Cat from Cats Page", () => {
+    render(<CatsPage allCats={testCats} />);
+
+    const h1 = screen.getByRole("heading", { level: 1 });
+    const btnFilter = screen.getByRole("button", { name: "Filter" });
+    const btnRegister = screen.getByRole("button", { name: "Register Cat" });
+    const btnDelete = screen.getByRole("columnheader", { name: "Delete" });
+    const btnView = screen.getByRole("columnheader", { name: "View" });
+
+    expect(h1).toBeInTheDocument();
+    expect(h1.textContent).toBe("View your cats");
+    expect(btnFilter).toBeInTheDocument();
+    expect(btnRegister).toBeInTheDocument();
+
+    fireEvent.click(btnDelete);
+
+    waitFor(() =>
+      expect(mockRouter).toMatchObject({
+        pathname: "/cats",
+      })
+    );
+  });
+
+  it("should filter cats", () => {
+    setUpFetchSuccessMock([testCats]);
+    render(<CatsPage allCats={testCats} />);
+    const inputText = screen.getByPlaceholderText(
+      "Enter text to filter cat by name or description"
+    );
+    const btnFilter = screen.getByText("Filter");
+
+    fireEvent.change(inputText, { target: { value: "Smelly" } });
+    fireEvent.click(btnFilter);
+
+    waitFor(() => {
+      expect(screen.findByText("Smelly cat")).toBeDefined();
+    });
+  });
+
+  it("should fail to filter cats", () => {
+    setUpFetchErrorMock("Failed to filter");
+    render(<CatsPage allCats={testCats} />);
+    const inputText = screen.getByPlaceholderText(
+      "Enter text to filter cat by name or description"
+    );
+    const btnFilter = screen.getByText("Filter");
+
+    fireEvent.change(inputText, { target: { value: "Smelly" } });
+    fireEvent.click(btnFilter);
   });
 });

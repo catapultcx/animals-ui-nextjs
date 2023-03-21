@@ -2,6 +2,7 @@ import CatPage, { getServerSideProps } from "@/pages/cats/[catId]/index";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from "__tests__/utils";
+import { testCat1 } from "../../../data";
 
 const validContext = {
   params: { catId: "1" },
