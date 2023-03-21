@@ -10,10 +10,10 @@ import { AddCatRow } from '@/components/AddCatRow'
 const service = new CatsService()
 
 export default function CatsPage({ cats } : any) {
-  const [catsList, setCatsList] = useState(cats)
+  const [catsList, setCatsList] = useState<Cat[]>(cats)
 
   const handleAddCat = () => {
-    setCatsList([{ id: '', name: '', description: ''},...catsList])
+    setCatsList([{ id: '', name: '', description: ''} as Cat,...catsList])
   }
   return (
     <>

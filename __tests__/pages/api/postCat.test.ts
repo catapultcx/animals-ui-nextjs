@@ -1,7 +1,7 @@
 import {setFetchUpMock} from "../../utils";
 import {jest, expect} from "@jest/globals";
 import postCatHandler from '@/pages/api/postCat'
-import {NextApiRequest, NextApiResponse} from "next";
+import {NextApiRequest} from "next";
 
 describe('pages/api/postCat', () => {
   beforeEach(() => {

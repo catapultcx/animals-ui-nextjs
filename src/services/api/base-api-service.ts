@@ -6,7 +6,9 @@ export abstract class BaseAPIService {
   }
 
   handleError (response: any) {
-    if (!response.ok) {
+    if (response.status === 204) {
+      return {};
+    } else if (!response.ok) {
       throw new Error(response.statusText)
     } else {
       return response.json()

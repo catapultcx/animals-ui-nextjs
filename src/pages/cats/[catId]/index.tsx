@@ -1,11 +1,25 @@
 import Head from 'next/head'
 import { Cat } from '@/domain/cat'
-import { Table } from 'react-bootstrap'
+import {Button, Table} from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
+import { useRouter } from 'next/router'
 
 const service = new CatsService()
 
 export default function CatPage({ cat } : {cat: Cat} ) {
+  const router = useRouter()
+  const handleClickDelete = async (id: string) => {
+    const fetchResponse = await fetch('/api/delCat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }),
+    })
+    if (fetchResponse.ok) {
+      await router.push('/cats')
+    }
+  }
   return (
     <>
       <Head>
@@ -29,7 +43,12 @@ export default function CatPage({ cat } : {cat: Cat} ) {
             <tr>
               <td>Description</td>
               <td>{cat.description}</td>
-            </tr>                                        
+            </tr>
+            <tr>
+              <td colSpan={2} style={{ textAlign: 'center'}}>
+                <Button onClick={() => handleClickDelete(cat.id)} variant="warning" data-testid="Delete-button">Delete</Button>
+              </td>
+            </tr>
           </tbody>
         </Table>
       </main>

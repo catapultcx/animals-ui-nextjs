@@ -2,7 +2,11 @@ import CatPage, { getServerSideProps } from '@/pages/cats/[catId]/index';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom'
 import { testCat1 } from '__tests__/data';
-import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
+import {setFetchUpMock, setUpFetchErrorMock, setUpFetchSuccessMock} from '__tests__/utils';
+import {expect, jest} from '@jest/globals'
+import mockRouter from 'next-router-mock'
+import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider'
+import userEvent from '@testing-library/user-event'
 
 const validContext = {
   params: { catId: '1' },
@@ -15,7 +19,11 @@ const contextMissingParams = {
   res: {}
 }
 
+
+jest.mock('next/router', () => require('next-router-mock'))
+
 describe('Cat Page', () => {
+
   beforeEach(() => {
     jest.clearAllMocks()
     jest.restoreAllMocks()
@@ -44,11 +52,24 @@ describe('Cat Page', () => {
   })
 
   it('should render without crashing', () => {
-    render(<CatPage cat={testCat1} />)
+    render(<MemoryRouterProvider><CatPage cat={testCat1} /></MemoryRouterProvider>)
 
     const h1 = screen.getByRole('heading', { level: 1 })
 
     expect(h1).toBeInTheDocument()
     expect(h1.textContent).toBe('Your cat Smelly')
   });
+  it('should render Delete button', () => {
+    render(<MemoryRouterProvider><CatPage cat={testCat1} /></MemoryRouterProvider>)
+    expect(screen.getByTestId('Delete-button')).toBeInTheDocument()
+  });
+  it('should handle deletion and route to /cats', async () => {
+    const user = userEvent.setup()
+    render(<MemoryRouterProvider><CatPage cat={testCat1} /></MemoryRouterProvider>)
+    setFetchUpMock([{ ok: true }])
+    const deleteButton = screen.getByTestId('Delete-button')
+    await user.click(deleteButton)
+    expect(mockRouter.pathname).toBe('/cats')
+  })
+
 });

@@ -1,6 +1,7 @@
 import { CatsService } from '@/services/api/cats-service'
 import { testCat1, testCats } from '../data'
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '../utils'
+import {expect, jest} from '@jest/globals'
 
 // https://github.com/facebook/jest/issues/13834
 // https://github.com/jsdom/jsdom/issues/1724
@@ -66,6 +67,62 @@ describe('Cats service', () => {
         .toThrow('Not found')
 
       expect(fetch).toHaveBeenCalledTimes(1)
+    })
+  })
+})
+
+describe('post', () => {
+  it('should return a cat when a valid post command is provided', async () => {
+    setUpFetchSuccessMock(testCat1)
+
+    const cat = await getService().post({ name: 'Smelly', description: 'Smelly cat' })
+
+    expect(cat).toBeDefined()
+    expect(cat?.id).toEqual('1')
+    expect(cat?.name).toEqual('Smelly')
+    expect(cat?.description).toEqual('Smelly cat')
+    expect(cat?.group).toEqual('Tabby')
+
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('should throw an error when an invalid post command is provided', async () => {
+    setUpFetchErrorMock('Bad request')
+
+    await expect(getService().post({ name: '', description: '' }))
+      .rejects
+      .toThrow('Bad request')
+
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('delete', () => {
+  it('should delete a cat for valid id', async () => {
+    const deleteId = '1'
+
+    setUpFetchSuccessMock({})
+
+    const result = await getService().delete({ id: deleteId })
+
+    expect(result).toEqual({})
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(fetch).toHaveBeenCalledWith(`${getService().baseUrl}/cats/${deleteId}`, {
+      method: 'DELETE'
+    })
+  })
+
+  it('should return null for invalid id', async () => {
+    const deleteId = 'NaN'
+
+    setUpFetchErrorMock('Not found')
+
+    const result = await getService().delete({ id: deleteId })
+
+    expect(result).toBeNull()
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(fetch).toHaveBeenCalledWith(`${getService().baseUrl}/cats/${deleteId}`, {
+      method: 'DELETE'
     })
   })
 })
