@@ -9,6 +9,10 @@ interface PostCommand {
   cat: Cat
 }
 
+interface PutCommand {
+  cat: Cat
+}
+
 interface DeleteCommand {
   id: string
 }
@@ -20,6 +24,10 @@ export class CatsService extends BaseAPIService {
 
   async post (params: PostCommand): Promise<Cat | null> {
     return await this._fetchPOST(`${this.baseUrl}/cats`, params.cat)
+  }
+
+  async put (params: PutCommand): Promise<null> {
+    return await this._fetchPUT(`${this.baseUrl}/cats/${params.cat.id}`, params.cat)
   }
 
   async delete (params: DeleteCommand): Promise<null> {

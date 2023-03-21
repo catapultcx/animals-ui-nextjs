@@ -31,6 +31,20 @@ export abstract class BaseAPIService {
       })
   }
 
+  async _fetchPUT(url: string, data: any) {
+    return await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).then(this.handleError)
+      .catch((err) => {
+        console.log(err.message)
+        throw err
+      })
+  }
+
   async _fetchDELETE(url: string) {
     return await fetch(url, {
       method: 'DELETE'

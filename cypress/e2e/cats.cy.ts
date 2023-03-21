@@ -31,6 +31,19 @@ describe('Cats', () => {
       cy.url().should('eq', 'http://localhost:3000/cats')
       cy.get('h1').contains('View your cats')
     })
+
+    it('should navigate to edit cat page from view cat page', () => {
+      cy.visit('http://localhost:3000/cats')
+
+      // Click 'View' button for first cat
+      cy.get('.table > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(4) > a:nth-child(1)').click()
+
+      // click 'Edit' button
+      cy.get('div.col:nth-child(1) > button:nth-child(1)').click()
+
+      cy.get('h1').contains('Update cat')
+      cy.get('button.mb-3').contains('Submit')
+    })
 })
 
   export {}

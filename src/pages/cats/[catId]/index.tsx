@@ -62,8 +62,13 @@ export default function CatPage({ cat } : {cat: Cat} ) {
             </tr>                                        
           </tbody>
         </Table>
-        <Container className={'ps-0 pe-0'}>
+        <Container className={'ps-0 pe-0 mb-3'}>
           <Row xs={'auto'}>
+            <Col>
+              <Button aria-label={'Edit button'} onClick={() => { router.push(`/cats/${cat.id}/update`) }} className='btn btn-primary'>
+                Edit...
+              </Button>
+            </Col>
             <Col>
               <Button aria-label={'Delete button'} onClick={() => deleteCat(cat.id)} className='btn btn-danger'>
                 Delete

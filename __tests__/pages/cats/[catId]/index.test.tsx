@@ -1,8 +1,8 @@
-import CatPage, { getServerSideProps } from '@/pages/cats/[catId]/index';
-import {fireEvent, render, screen, waitFor, waitForElementToBeRemoved} from '@testing-library/react';
+import CatPage, { getServerSideProps } from '@/pages/cats/[catId]/index'
+import {fireEvent, render, screen, waitFor, waitForElementToBeRemoved} from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { testCat1 } from '__tests__/data';
-import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
+import { testCat1 } from '__tests__/data'
+import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils'
 
 import mockRouter from 'next-router-mock'
 
@@ -74,8 +74,26 @@ describe('Cat Page', () => {
     })
   })
 
+  it('should navigate to edit cat page if edit button is clicked', async () => {
+    mockRouter.push('/cats/1')
+
+    setUpFetchSuccessMock([testCat1])
+
+    render(<CatPage cat={testCat1}/>)
+
+    const deleteButton = screen.getByRole('button', {name: 'Edit button'})
+
+    fireEvent.click(deleteButton)
+
+    await waitFor(() => {
+      expect(mockRouter).toMatchObject({
+        pathname: '/cats/1/update'
+      });
+    })
+  })
+
   it('should show error message if fetch error occurred when deleting cat', async () => {
-    mockRouter.push('/cats/1');
+    mockRouter.push('/cats/1')
 
     setUpFetchSuccessMock([testCat1])
 
@@ -97,7 +115,7 @@ describe('Cat Page', () => {
   })
 
   it('should close error message when dismissed', async () => {
-    mockRouter.push('/cats/1');
+    mockRouter.push('/cats/1')
 
     setUpFetchSuccessMock([testCat1])
 
@@ -109,10 +127,10 @@ describe('Cat Page', () => {
 
     fireEvent.click(deleteButton)
 
-    await screen.findByRole('button', { name: 'Close alert' });
+    await screen.findByRole('button', { name: 'Close alert' })
 
-    fireEvent.click(screen.getByRole('button', { name: 'Close alert' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Close alert' }))
 
     await waitForElementToBeRemoved(screen.getByText('An error occurred'))
   })
-});
+})
