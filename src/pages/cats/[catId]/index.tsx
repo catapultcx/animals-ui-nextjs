@@ -3,11 +3,15 @@ import { Cat } from '@/domain/cat'
 import {Button, Table} from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 import { useRouter } from 'next/router'
+import {createRef} from "react";
 
 const service = new CatsService()
 
 export default function CatPage({ cat } : {cat: Cat} ) {
   const router = useRouter()
+  const nameRef = createRef<HTMLTableCellElement>()
+  const descRef = createRef<HTMLTableCellElement>()
+
   const handleClickDelete = async (id: string) => {
     const fetchResponse = await fetch('/api/delCat', {
       method: 'POST',
@@ -15,6 +19,23 @@ export default function CatPage({ cat } : {cat: Cat} ) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id }),
+    })
+    if (fetchResponse.ok) {
+      await router.push('/cats')
+    }
+  }
+  const handleClickUpdate = async (id: string) => {
+    const name = nameRef.current?.innerText || ''
+    const description =  descRef.current?.innerText || ''
+    if (!name || !description) {
+      return
+    }
+    const fetchResponse = await fetch('/api/updateCat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id, name, description }),
     })
     if (fetchResponse.ok) {
       await router.push('/cats')
@@ -38,15 +59,16 @@ export default function CatPage({ cat } : {cat: Cat} ) {
             </tr>             
             <tr>
               <td>Name</td>
-              <td>{cat.name}</td>
+              <td contentEditable data-label="name" data-testid="name" ref={nameRef} suppressContentEditableWarning={true}>{cat.name}</td>
             </tr>             
             <tr>
               <td>Description</td>
-              <td>{cat.description}</td>
+              <td contentEditable data-label="desc" data-testid="desc" ref={descRef} suppressContentEditableWarning={true}>{cat.description}</td>
             </tr>
             <tr>
               <td colSpan={2} style={{ textAlign: 'center'}}>
                 <Button onClick={() => handleClickDelete(cat.id)} variant="warning" data-testid="Delete-button">Delete</Button>
+                <Button style={{ marginLeft: '20px' }} onClick={() => handleClickUpdate(cat.id)} variant="secondary" data-testid="Update-button">Update</Button>
               </td>
             </tr>
           </tbody>

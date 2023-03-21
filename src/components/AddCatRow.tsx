@@ -46,8 +46,8 @@ export const AddCatRow: FC<AddCatRowType> = ({ successHandler }) => {
   return (
       <tr>
         <td>&nbsp;</td>
-        <td contentEditable data-label="name" data-testid="name" ref={nameRef}></td>
-        <td contentEditable data-label="desc" data-testid="desc" ref={descRef}></td>
+        <td contentEditable data-label="name" data-testid="name" ref={nameRef} suppressContentEditableWarning={true}></td>
+        <td contentEditable data-label="desc" data-testid="desc" ref={descRef} suppressContentEditableWarning={true}></td>
         <td>
           <Button onClick={handleClickAdd} variant={variant} disabled={isDisabled} data-testid="Add-button">{buttonLabel}</Button>
         </td>

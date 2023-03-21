@@ -26,7 +26,6 @@ describe('Cat Page', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    jest.restoreAllMocks()
   })
 
   it('getServerSideProps should return account property for valid context', async () => {
@@ -72,4 +71,12 @@ describe('Cat Page', () => {
     expect(mockRouter.pathname).toBe('/cats')
   })
 
+  it('should handle update and route to /cats', async () => {
+    const user = userEvent.setup()
+    render(<MemoryRouterProvider><CatPage cat={testCat1} /></MemoryRouterProvider>)
+    setFetchUpMock([{ ok: true }])
+    const updateButton = screen.getByTestId('Update-button')
+    await user.click(updateButton)
+    expect(mockRouter.pathname).toBe('/cats')
+  })
 });
