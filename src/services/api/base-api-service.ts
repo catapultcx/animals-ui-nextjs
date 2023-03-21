@@ -33,6 +33,18 @@ export abstract class BaseAPIService {
     return response as T;
   }
 
+  async _fetchPUT<T> (url: string, req: T) {
+    let response = await this._fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'PUT',
+      body: JSON.stringify(req)
+    });
+    return response as T;
+  }
+
   async _fetch (url: string, params: any) {
     return await fetch(url, params)
       .then(this.handleError)

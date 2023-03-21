@@ -4,6 +4,7 @@ import { Button, Col, Row, Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 import { MouseEvent } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const service = new CatsService()
 
@@ -46,6 +47,11 @@ export default function CatPage({ cat } : {cat: Cat} ) {
           <Row>
               <Col>
                   <Button onClick={deleteHandler} variant="danger" className="mb-3">Delete Cat</Button>
+              </Col>
+              <Col className="text-end">
+                  <Link href={`/cats/${cat.id}/edit`} role="button">
+                      <Button variant="primary" className="pull-right">Edit</Button>
+                  </Link>
               </Col>
           </Row>
       </main>
