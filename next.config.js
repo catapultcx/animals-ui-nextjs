@@ -11,3 +11,15 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
+
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/api/1/:path*',
+        destination: `${process.env.API_URL}/:path*`
+      }
+    ]
+  }
+}
+

@@ -13,4 +13,8 @@ export class CatsService extends BaseAPIService {
   async all(): Promise<{ cats: Cat[] } | null> {
     return this._fetchGET(`${this.baseUrl}/cats`)
   }
+
+  async create(request: Cat): Promise<Cat | null> {
+    return this._fetchPOST<Cat>(`${this.baseUrl}/cats`, request)
+  }
 }

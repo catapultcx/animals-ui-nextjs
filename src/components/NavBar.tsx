@@ -37,6 +37,12 @@ const NavBar = () => {
                   >
                     Manage cats
                   </Link>
+                  <Link
+                      href='/cats/register'
+                      className='nav-link'
+                  >
+                    Register
+                  </Link>
                 </>
             </Nav>
           </Navbar.Collapse>
