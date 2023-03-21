@@ -39,7 +39,7 @@ describe('Edit Cat Page', () => {
     expect(response.props.cat).toEqual(testCat1)
 
     expect(fetch).toHaveBeenCalledTimes(1)
-    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/1'), {})
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/1'), expect.any(Object))
   })
 
   it('should navigate back to manage cats', async () => {
@@ -66,7 +66,7 @@ describe('Edit Cat Page', () => {
 
     expect(response).toEqual({ notFound: true })
     expect(fetch).toHaveBeenCalledTimes(1)
-    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/1'), {})
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/1'), expect.any(Object))
   })
 
   it('should not navigate back to manage cats as save error', async () => {

@@ -76,13 +76,13 @@ describe('Cats service', () => {
     it('should update existing cat', async () => {
       setUpFetchSuccessMock(testCat1)
 
-      const found = await getService().update({ cat: testCat1 })
+      const updated = await getService().update({ cat: testCat1 })
 
-      expect(found).toBeDefined()
-      expect(found?.id).toEqual('1')
-      expect(found?.name).toEqual('Smelly')
-      expect(found?.description).toEqual('Smelly cat')
-      expect(found?.group).toEqual('Tabby')
+      expect(updated).toBeDefined()
+      expect(updated.id).toEqual('1')
+      expect(updated.name).toEqual('Smelly')
+      expect(updated.description).toEqual('Smelly cat')
+      expect(updated.group).toEqual('Tabby')
 
       expect(fetch).toHaveBeenCalledTimes(1)
       expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats/' + testCat1.id), expect.any(Object))
@@ -104,13 +104,13 @@ describe('Cats service', () => {
     it('should register a new cat', async () => {
       setUpFetchSuccessMock(testCat1)
 
-      const found = await getService().create({ cat: testCat1_without_id })
+      const created = await getService().create({ cat: testCat1_without_id })
 
-      expect(found).toBeDefined()
-      expect(found?.id).toEqual('1')
-      expect(found?.name).toEqual('Smelly')
-      expect(found?.description).toEqual('Smelly cat')
-      expect(found?.group).toEqual('Tabby')
+      expect(created).toBeDefined()
+      expect(created?.id).toEqual('1')
+      expect(created?.name).toEqual('Smelly')
+      expect(created?.description).toEqual('Smelly cat')
+      expect(created?.group).toEqual('Tabby')
 
       expect(fetch).toHaveBeenCalledTimes(1)
       expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats'), expect.any(Object))
@@ -120,6 +120,34 @@ describe('Cats service', () => {
       setUpFetchErrorMock('Not found')
 
       await expect(getService().create({ cat: testCat1_without_id }))
+        .rejects
+        .toThrow('Not found')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats'), expect.any(Object))
+    })
+  })
+
+  describe('delete', () => {
+    it('should delete a new cat', async () => {
+      setUpFetchSuccessMock(testCat1)
+
+      const deleted = await getService().delete({ cat: testCat1.id })
+
+      expect(deleted).toBeDefined()
+      expect(deleted?.id).toEqual('1')
+      expect(deleted?.name).toEqual('Smelly')
+      expect(deleted?.description).toEqual('Smelly cat')
+      expect(deleted?.group).toEqual('Tabby')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/cats'), expect.any(Object))
+    })
+
+    it('should throw an error if fetch error', async () => {
+      setUpFetchErrorMock('Not found')
+
+      await expect(getService().delete({ cat: testCat1.id }))
         .rejects
         .toThrow('Not found')
 

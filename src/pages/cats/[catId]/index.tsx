@@ -1,13 +1,30 @@
 import Head from 'next/head'
 import { Cat } from '@/domain/cat'
-import { Table } from 'react-bootstrap'
+import { Button, Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
-import Link from 'next/link';
-import React from 'react';
+import Link from 'next/link'
+import React from 'react'
+import { useRouter } from 'next/router';
 
 const service = new CatsService()
 
 export default function CatPage ({ cat }: { cat: Cat }) {
+
+  const router = useRouter();
+
+  const deleteCat = (id: string) => {
+    if (confirm('Are you sure want to delete cat ?')) {
+      service
+        .delete({ id })
+        .then(() => {
+          router.push('/cats');
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+    }
+  };
+
   return (
     <>
       <Head>
@@ -44,6 +61,11 @@ export default function CatPage ({ cat }: { cat: Cat }) {
         <Link href={ `/cats/${ cat.id }/edit` } className="btn btn-success ms-3">
           Edit Cat details
         </Link>
+        <Button type="button" className="btn btn-danger ms-3"
+                onClick={ () => deleteCat(cat.id) }
+        >
+          Delete Cat
+        </Button>
       </main>
     </>
   )

@@ -1,8 +1,8 @@
-import CatsPage, { getServerSideProps } from '@/pages/cats/index';
-import { render, screen } from '@testing-library/react';
+import CatsPage, { getServerSideProps } from '@/pages/cats/index'
+import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
-import { testCats } from '__tests__/data';
+import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils'
+import { accountError1, testCats } from '__tests__/data'
 
 const validContext = {
   req: {},
@@ -21,7 +21,7 @@ describe('Cats Page', () => {
   })
 
   it('getServerSideProps should return account property for valid context', async () => {
-    setUpFetchSuccessMock([testCats])
+    setUpFetchSuccessMock([ testCats ])
 
     const response = await getServerSideProps(validContext as any)
 
@@ -34,7 +34,7 @@ describe('Cats Page', () => {
   })
 
   it('getServerSideProps should return not found for any fetch error', async () => {
-    setUpFetchErrorMock('Not found')
+    setUpFetchErrorMock(accountError1.statusText)
 
     const response = await getServerSideProps(contextMissingParams as any)
 
@@ -44,11 +44,11 @@ describe('Cats Page', () => {
 
 
   it('should render without crashing', () => {
-    render(<CatsPage cats={testCats}/>)
+    render(<CatsPage cats={ testCats }/>)
 
     const h1 = screen.getByRole('heading', { level: 1 })
 
     expect(h1).toBeInTheDocument()
     expect(h1.textContent).toBe('View your cats')
-  });
-});
+  })
+})

@@ -6,19 +6,21 @@ export abstract class BaseAPIService {
   }
 
   handleError (response: any) {
-    if (!response.ok) {
-      throw new Error(response.statusText)
-    } else {
+    if (response.ok) {
       return response.json()
+    } else {
+      throw new Error(response.statusText)
     }
   }
 
   async _fetchGET (url: string) {
-    return await this._fetch(url, {})
+    return await this._fetch(url, {
+      method: 'GET'
+    })
   }
 
   async _fetchPOST (url: string, data: any) {
-    return await fetch(url, {
+    return await this._fetch(url, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -26,11 +28,12 @@ export abstract class BaseAPIService {
       },
       body: JSON.stringify(data)
     })
-      .then(this.handleError)
-      .catch((err) => {
-        console.log(err.message);
-        throw err;
-      });
+  }
+
+  async _fetchDELETE (url: string) {
+    return await this._fetch(url, {
+      method: 'DELETE'
+    })
   }
 
   async _fetch (url: string, params: any) {
