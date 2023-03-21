@@ -2,7 +2,7 @@ export abstract class BaseAPIService {
   baseUrl: string
 
   constructor () {
-    this.baseUrl = `${process.env.NEXT_PUBLIC_API_URL}`
+    this.baseUrl = `${process.env.API_URL}`
   }
 
   handleError (response: any) {

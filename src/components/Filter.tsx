@@ -1,28 +1,22 @@
 import {Button, Col, Form, Row} from "react-bootstrap";
 import {useState} from "react";
 
-interface  FilterProps {
-    onFilter: any
-}
-export default function Filter({onFilter} : FilterProps) {
+export default function Filter() {
 
-    const [text, setText] = useState('');
+    const [filter, setText] = useState('');
 
     const onChange = ({target}: any) => {
         setText(target.value)
     };
 
     return (
-        <Form onSubmit={event => {
-            event.preventDefault();
-            onFilter(text);
-        }} noValidate>
+        <Form action={`/cats?filter=${filter}`} aria-label='filter-form' noValidate>
             <Row>
                 <Col>
                     <Form.Group>
-                        <Form.Control name='text' value={text} onChange={onChange}
+                        <Form.Control name='filter' value={filter} onChange={onChange}
                                       placeholder='Enter text to filter cat by name or description'
-                                      required aria-label='text'>
+                                      required aria-label='filter'>
                         </Form.Control>
                     </Form.Group>
                 </Col>

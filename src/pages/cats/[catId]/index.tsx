@@ -1,28 +1,13 @@
 import Head from 'next/head'
 import { Cat } from '@/domain/cat'
-import { Table, Button } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
-import {useRouter} from "next/router";
-import {toast} from "react-toastify";
-import {DeleteCatService} from "@/services/api/delete-cat-service";
 import Link from "next/link";
 
 const catsService = new CatsService()
-const deleteCatService = new DeleteCatService()
 
 export default function CatPage({ cat } : {cat: Cat} ) {
 
-  const router = useRouter();
-  const deleteById = (id: string) => {
-      deleteCatService.delete(id)
-            .then((resp) => {
-                toast(`Cat ${resp?.name} has been deleted successfully!`, { type: "success" });
-                router.push("/cats");
-            })
-            .catch((err) => {
-                toast(`Failed to delete cat ${id} with error ${err}`, { type: "error" });
-            });
-  };
   return (
     <>
       <Head>
@@ -42,10 +27,9 @@ export default function CatPage({ cat } : {cat: Cat} ) {
                     </Link>
                 </th>
                 <th>
-                    <Button onClick={() => deleteById(cat.id)}
-                            className="btn btn-primary btn-auth0-cta btn-padded float-end">
+                    <Link href={`/api/cats/${cat.id}/delete`} className='btn btn-primary btn-auth0-cta btn-padded float-end'>
                         Delete
-                    </Button>
+                    </Link>
                 </th>
             </tr>
             </thead>

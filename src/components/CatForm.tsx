@@ -4,10 +4,10 @@ import {useState} from "react";
 
 interface CatFormProps {
     cat: Cat;
-    onSubmit: any;
+    formAction : string;
 }
 
-export default function CatForm({cat, onSubmit}: CatFormProps) {
+export default function CatForm({cat, formAction}: CatFormProps) {
 
     const [localCat, updateCat] = useState<Cat>(cat);
 
@@ -19,10 +19,7 @@ export default function CatForm({cat, onSubmit}: CatFormProps) {
     };
 
     return (
-        <Form onSubmit={event => {
-            event.preventDefault();
-            onSubmit(localCat);
-        }} noValidate>
+        <Form action={formAction} method='POST' aria-label='cat-form' noValidate>
             <Form.Group className='mb-3'>
                 <Form.Label htmlFor='name'>Name:</Form.Label>
                 <Form.Control name='name' value={localCat.name} onChange={onChange} placeholder='Enter cat name'

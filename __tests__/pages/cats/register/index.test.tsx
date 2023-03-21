@@ -9,66 +9,71 @@ jest.mock("next/router", () => require("next-router-mock"));
 
 
 describe('Register Cat Page', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-    jest.restoreAllMocks()
-  })
+    beforeEach(() => {
+        jest.clearAllMocks()
+        jest.restoreAllMocks()
+    })
 
-  it('should render without crashing', () => {
-    render(<RegisterCatPage/>)
+    it('should render without crashing', () => {
+        render(<RegisterCatPage/>)
 
-    const h1 = screen.getByRole('heading', { level: 1 })
+        const h1 = screen.getByRole('heading', {level: 1})
 
-    expect(h1).toBeInTheDocument()
-    expect(h1.textContent).toBe('Register New Cat')
+        expect(h1).toBeInTheDocument()
+        expect(h1.textContent).toBe('Register New Cat')
 
-    expect(screen.getByText('Name:')).toBeInTheDocument()
-    expect(screen.getByText('Description:')).toBeInTheDocument()
+        expect(screen.getByText('Name:')).toBeInTheDocument()
+        expect(screen.getByText('Description:')).toBeInTheDocument()
 
-    const  inputName = screen.getByLabelText('name');
-    const  inputDesc = screen.getByLabelText('description');
-    const  btnSubmit = screen.getByText('Submit');
-    expect(inputName).toBeInTheDocument()
-    expect(inputDesc).toBeInTheDocument()
-    expect(btnSubmit).toBeInTheDocument()
-  });
-
-  it('should route to cats page after registering a cat', () => {
-    setUpFetchSuccessMock(testCat1);
-    render(<RegisterCatPage/>)
-
-    const  inputName = screen.getByLabelText('name');
-    const  inputDesc = screen.getByLabelText('description');
-    const  btnSubmit = screen.getByText('Submit');
-
-    fireEvent.change(inputName, { target: { value: "Smelly" } })
-    fireEvent.change(inputDesc, { target: { value: "Smelly cat" } });
-    fireEvent.click(btnSubmit);
-
-    waitFor(() =>
-        expect(mockRouter).toMatchObject({
-          pathname: "/cats"
-        })
-    );
-  });
-
-  it('should stay on register cat page after failure in registering a cat', () => {
-    mockRouter.push("/cats/register");
-    setUpFetchErrorMock('Failed to register');
-    render(<RegisterCatPage/>)
-
-    const  inputName = screen.getByLabelText('name');
-    const  inputDesc = screen.getByLabelText('description');
-    const  btnSubmit = screen.getByText('Submit');
-
-    fireEvent.change(inputName, { target: { value: "Smelly" } })
-    fireEvent.change(inputDesc, { target: { value: "Smelly cat" } });
-    fireEvent.click(btnSubmit);
-
-
-    expect(mockRouter).toMatchObject({
-      pathname: "/cats/register"
+        const inputName = screen.getByLabelText('name');
+        const inputDesc = screen.getByLabelText('description');
+        const btnSubmit = screen.getByText('Submit');
+        expect(inputName).toBeInTheDocument()
+        expect(inputDesc).toBeInTheDocument()
+        expect(btnSubmit).toBeInTheDocument()
     });
-  });
 
+    it('should route to cats page after registering a cat', () => {
+        setUpFetchSuccessMock(testCat1);
+        render(<RegisterCatPage/>)
+
+        const inputName = screen.getByLabelText('name');
+        const inputDesc = screen.getByLabelText('description');
+
+        fireEvent.change(inputName, {target: {value: "Smelly"}})
+        fireEvent.change(inputDesc, {target: {value: "Smelly cat"}});
+
+        fireEvent.submit(screen.getByRole('form'));
+
+        waitFor(() =>
+            expect(mockRouter).toMatchObject({
+                pathname: "/api/cats/register"
+            })
+        );
+
+
+        waitFor(() =>
+            expect(mockRouter).toMatchObject({
+                pathname: "/cats"
+            })
+        );
+    });
+
+    it('should stay on register cat page after failure in registering a cat', () => {
+        mockRouter.push("/cats/register");
+        setUpFetchErrorMock('Failed to register');
+        render(<RegisterCatPage/>)
+
+        const inputName = screen.getByLabelText('name');
+        const inputDesc = screen.getByLabelText('description');
+
+        fireEvent.change(inputName, {target: {value: "Smelly"}})
+        fireEvent.change(inputDesc, {target: {value: "Smelly cat"}});
+        fireEvent.submit(screen.getByRole('form'));
+
+
+        expect(mockRouter).toMatchObject({
+            pathname: "/cats/register"
+        });
+    });
 });

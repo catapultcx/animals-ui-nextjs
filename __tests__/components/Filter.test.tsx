@@ -1,32 +1,35 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom'
-import {Cat} from "@/domain/cat";
 import Filter from "@/components/Filter";
+import mockRouter from "next-router-mock";
+
+jest.mock("next/router", () => require("next-router-mock"));
 
 describe('Filter', () => {
     it('should render without crashing', () => {
 
-        render(<Filter onFilter={jest.fn()}/>)
+        render(<Filter/>)
 
 
-        const  inputText = screen.getByPlaceholderText('Enter text to filter cat by name or description');
-        const  btnFilter = screen.getByText('Filter');
+        const inputText = screen.getByPlaceholderText('Enter text to filter cat by name or description');
+        const btnFilter = screen.getByText('Filter');
         expect(inputText).toBeInTheDocument()
         expect(btnFilter).toBeInTheDocument()
     });
 
-    const newCat:Cat = {id : '1', name : '', description : '', group : 'Tabby'};
-    it('should allow user to enter input and submit', () => {
+    it('should allow user to enter text to filter and submit', () => {
 
-        const onFilter = jest.fn();
+        render(<Filter/>)
 
-        render(<Filter onFilter={onFilter}/>)
+        const inputText = screen.getByPlaceholderText('Enter text to filter cat by name or description');
 
-        const  inputText = screen.getByPlaceholderText('Enter text to filter cat by name or description');
-        const  btnFilter = screen.getByText('Filter');
+        fireEvent.change(inputText, {target: {value: "cat"}})
+        fireEvent.submit(screen.getByRole('form'));
 
-        fireEvent.change(inputText, { target: { value: "cat" } })
-        fireEvent.click(btnFilter);
-        expect(onFilter).toBeCalledWith('cat');
+        waitFor(() => {
+            expect(mockRouter).toMatchObject({
+                pathname: "/cats?filter=cat"
+            })
+        });
     });
 });

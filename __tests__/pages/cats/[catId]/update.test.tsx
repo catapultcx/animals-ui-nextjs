@@ -71,13 +71,18 @@ describe('Update Cat Page', () => {
         setUpFetchSuccessMock(testCat1Updated);
         render(<UpdateCatPage cat={testCat1}/>)
 
-        const  inputName = screen.getByLabelText('name');
-        const  inputDesc = screen.getByLabelText('description');
-        const  btnSubmit = screen.getByText('Submit');
+        const inputName = screen.getByLabelText('name');
+        const inputDesc = screen.getByLabelText('description');
 
-        fireEvent.change(inputName, { target: { value: "Smelly1" } })
-        fireEvent.change(inputDesc, { target: { value: "Smelly cat1" } });
-        fireEvent.click(btnSubmit);
+        fireEvent.change(inputName, {target: {value: "Smelly1"}})
+        fireEvent.change(inputDesc, {target: {value: "Smelly cat1"}});
+        fireEvent.submit(screen.getByRole('form'));
+
+        waitFor(() =>
+            expect(mockRouter).toMatchObject({
+                pathname: "/api/cats/1/update"
+            })
+        );
 
         waitFor(() =>
             expect(mockRouter).toMatchObject({
@@ -91,13 +96,12 @@ describe('Update Cat Page', () => {
         setUpFetchErrorMock('Failed to update');
         render(<UpdateCatPage cat={testCat1}/>)
 
-        const  inputName = screen.getByLabelText('name');
-        const  inputDesc = screen.getByLabelText('description');
-        const  btnSubmit = screen.getByText('Submit');
+        const inputName = screen.getByLabelText('name');
+        const inputDesc = screen.getByLabelText('description');
 
-        fireEvent.change(inputName, { target: { value: "Smelly1" } })
-        fireEvent.change(inputDesc, { target: { value: "Smelly cat1" } });
-        fireEvent.click(btnSubmit);
+        fireEvent.change(inputName, {target: {value: "Smelly1"}})
+        fireEvent.change(inputDesc, {target: {value: "Smelly cat1"}});
+        fireEvent.submit(screen.getByRole('form'));
 
 
         expect(mockRouter).toMatchObject({

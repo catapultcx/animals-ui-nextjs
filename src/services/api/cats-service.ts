@@ -6,7 +6,7 @@ interface GetCommand {
 }
 
 interface FilterCommand {
-  text: string
+  filter: string
 }
 
 export class CatsService extends BaseAPIService {
@@ -19,6 +19,6 @@ export class CatsService extends BaseAPIService {
   }
 
   async filter(params: FilterCommand): Promise<{ cats: Cat[] } | null> {
-    return this._fetchGET(`${this.baseUrl}/cats/filter?text=${params.text}`)
+    return this._fetchGET(`${this.baseUrl}/cats/filter?text=${params.filter}`)
   }
 }
