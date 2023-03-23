@@ -4,6 +4,7 @@ import { Alert, Button, Form, Table } from "react-bootstrap";
 import { CatsService } from "@/services/api/cats-service";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const service = new CatsService();
 
@@ -13,14 +14,17 @@ export default function CatsPage({ cats }: any) {
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 
+	const router = useRouter();
+
 	const handleNameSearch = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log(`search ${name}`);
+		setCatsData((prev) => prev.filter((cat) => cat.name === name));
+		// router.replace({ pathname: "/cats/search", query: { name } });
 	};
 
 	const handleDescriptionSearch = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log(`search ${description}`);
+		setCatsData((prev) => prev.filter((cat) => cat.description === description));
 	};
 
 	const handleDelete = (event: React.FormEvent<HTMLFormElement>) => {
@@ -35,6 +39,10 @@ export default function CatsPage({ cats }: any) {
 		} catch (error) {
 			console.error(error);
 		}
+	};
+
+	const handleResetFilters = () => {
+		setCatsData(cats);
 	};
 
 	return (
@@ -76,6 +84,10 @@ export default function CatsPage({ cats }: any) {
 						Search by Description
 					</Button>
 				</Form>
+
+				<Button variant="success" className="mb-2" type="submit" onClick={handleResetFilters}>
+					Reset Filters
+				</Button>
 				<Table striped bordered hover>
 					<thead>
 						<tr>
@@ -84,6 +96,7 @@ export default function CatsPage({ cats }: any) {
 							<th>Description</th>
 							<th>View</th>
 							<th>Delete</th>
+							<th>Update</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -106,6 +119,11 @@ export default function CatsPage({ cats }: any) {
 											</Button>
 										</form>
 									</td>
+									<td>
+										<Link href={`/cats/update`} className="btn btn-warning btn-auth0-cta btn-padded" type="submit">
+											Update
+										</Link>
+									</td>
 								</tr>
 							))}
 					</tbody>
@@ -117,7 +135,17 @@ export default function CatsPage({ cats }: any) {
 
 export async function getServerSideProps(context: any) {
 	try {
-		const cats = await service.all();
+		const { name, description } = context.query;
+		let cats: { cats: Cat[] } | null = null;
+
+		if (name) {
+			cats = await service.search({ name: name as string });
+		} else if (description) {
+			cats = await service.search({ description: description as string });
+		} else {
+			cats = await service.all();
+		}
+
 		return { props: { cats } };
 	} catch (err) {
 		console.log(err);

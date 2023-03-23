@@ -5,8 +5,6 @@ import { CatsService } from "@/services/api/cats-service";
 import CatForm from "../../components/CatForm";
 import Link from "next/link";
 
-const service = new CatsService();
-
 export default function CatsPage({ cats }: any) {
 	return (
 		<>
@@ -22,14 +20,4 @@ export default function CatsPage({ cats }: any) {
 			</main>
 		</>
 	);
-}
-
-export async function getServerSideProps(context: any) {
-	try {
-		const cats = await service.all();
-		return { props: { cats } };
-	} catch (err) {
-		console.log(err);
-		return { notFound: true };
-	}
 }
