@@ -35,7 +35,6 @@ const CreateAnimalPage = ({ cat, editMode }: Props) => {
 			try {
 				if (editMode) {
 					const updatedCat: Cat = { name: catData.name, description: catData.description, group: "MAMMALS" };
-					console.log(updatedCat);
 					service.update({
 						id: cat?.id as string,
 						cat: updatedCat,
