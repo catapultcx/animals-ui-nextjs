@@ -2,10 +2,12 @@ import Head from "next/head";
 import { Cat } from "@/domain/cat";
 import { Table } from "react-bootstrap";
 import { CatsService } from "@/services/api/cats-service";
-import CatForm from "../../components/CatForm";
+import CatForm from "../../../components/CatForm";
 import Link from "next/link";
 
-export default function CatsPage({ cats }: any) {
+const service = new CatsService();
+
+export default function CatsPage({ cat }: any) {
 	return (
 		<>
 			<Head>
@@ -16,8 +18,18 @@ export default function CatsPage({ cats }: any) {
 			</Head>
 			<main>
 				<h1>Register your cat</h1>
-				<CatForm editMode={false} />
+				<CatForm editMode={true} cat={cat} />
 			</main>
 		</>
 	);
+}
+
+export async function getServerSideProps(context: any) {
+	try {
+		const cat = await service.get({ id: context?.params?.catId });
+		return { props: { cat } };
+	} catch (err) {
+		console.log(err);
+		return { notFound: true };
+	}
 }

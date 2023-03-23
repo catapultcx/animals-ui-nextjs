@@ -7,14 +7,22 @@ import { Alert } from "react-bootstrap";
 
 const service = new CatsService();
 
-const CreateAnimalPage = () => {
-	const [cat, setCat] = useState<{ name: string; description: string }>({ name: "", description: "" });
+type Props = {
+	editMode: boolean;
+	cat?: Cat;
+};
+
+const CreateAnimalPage = ({ cat, editMode }: Props) => {
+	const [catData, setCat] = useState<{ name: string; description: string }>(
+		cat ? { name: cat.name, description: cat.description } : { name: "", description: "" }
+	);
 	const [formValidated, setFormValidated] = useState(false);
 	const [catCreated, setCatCreated] = useState<boolean>(false);
+	const [catUpdated, setCatUpdated] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setCat({ ...cat, [event.target.name]: event.target.value });
+		setCat({ ...catData, [event.target.name]: event.target.value });
 	};
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -25,10 +33,20 @@ const CreateAnimalPage = () => {
 			event.stopPropagation();
 		} else {
 			try {
-				service.create({ name: cat.name, description: cat.description });
+				if (editMode) {
+					const updatedCat: Cat = { name: catData.name, description: catData.description, group: "MAMMALS" };
+					console.log(updatedCat);
+					service.update({
+						id: cat?.id as string,
+						cat: updatedCat,
+					});
+					setCatUpdated(true);
+				} else {
+					service.create({ name: catData.name, description: catData.description });
+					setCatCreated(true);
+				}
 				form.reset();
 				setCat({ name: "", description: "" });
-				setCatCreated(true);
 				setFormValidated(false);
 			} catch (error) {
 				setError("Something went wrong.");
@@ -44,6 +62,11 @@ const CreateAnimalPage = () => {
 					<Alert.Heading>Your cat has been registered.</Alert.Heading>
 				</Alert>
 			)}
+			{catUpdated && (
+				<Alert variant="success" onClose={() => setCatUpdated(false)} dismissible>
+					<Alert.Heading>Your cat has been updated.</Alert.Heading>
+				</Alert>
+			)}
 			{error && (
 				<Alert variant="danger" onClose={() => setError(null)} dismissible>
 					<Alert.Heading>{error}</Alert.Heading>
@@ -53,18 +76,18 @@ const CreateAnimalPage = () => {
 				<Form noValidate validated={formValidated} onSubmit={handleSubmit} action={`${process.env.API_URL}/cats`} method="POST">
 					<Form.Group controlId="formName">
 						<Form.Label>Name</Form.Label>
-						<Form.Control required type="text" name="name" value={cat.name} onChange={handleInputChange} />
+						<Form.Control required type="text" name="name" value={catData.name} onChange={handleInputChange} />
 						<Form.Control.Feedback type="invalid">Please provide a name.</Form.Control.Feedback>
 					</Form.Group>
 
 					<Form.Group controlId="formDescription">
 						<Form.Label>Description</Form.Label>
-						<Form.Control required as="textarea" name="description" value={cat.description} onChange={handleInputChange} />
+						<Form.Control required as="textarea" name="description" value={catData.description} onChange={handleInputChange} />
 						<Form.Control.Feedback type="invalid">Please provide a description.</Form.Control.Feedback>
 					</Form.Group>
 
-					<Button className="mt-2" variant="primary" type="submit">
-						Create Animal
+					<Button className="mt-2" variant={editMode ? "warning" : "primary"} type="submit">
+						{editMode ? "Update" : "Create Cat"}
 					</Button>
 				</Form>
 			</div>

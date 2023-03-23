@@ -120,7 +120,7 @@ export default function CatsPage({ cats }: any) {
 										</form>
 									</td>
 									<td>
-										<Link href={`/cats/update`} className="btn btn-warning btn-auth0-cta btn-padded" type="submit">
+										<Link href={`/cats/${c.id}/update`} className="btn btn-warning btn-auth0-cta btn-padded" type="submit">
 											Update
 										</Link>
 									</td>
