@@ -13,6 +13,11 @@ interface DeleteCommand {
   id: string
 }
 
+interface UpdateCommand {
+  id: string,
+  cat: Cat
+}
+
 export class CatsService extends BaseAPIService {
   async get (params: GetCommand): Promise<Cat | null> {
     return await this._fetchGET(`${this.baseUrl}/cats/${params.id}`)
@@ -28,5 +33,9 @@ export class CatsService extends BaseAPIService {
 
   async delete(params: DeleteCommand): Promise<Cat> {
     return await this._fetchDELETE(`${this.baseUrl}/cats/${params.id}`)
+  }
+
+  async update(params: UpdateCommand): Promise<Cat> {
+    return await this._fetchPUT(`${this.baseUrl}/cats/${params.id}`, params.cat)
   }
 }

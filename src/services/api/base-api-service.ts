@@ -44,6 +44,22 @@ export abstract class BaseAPIService {
         })
   }
 
+  async _fetchPUT (url: string, data: unknown) {
+    return await fetch(url, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+        .then(this.handleError)
+        .catch((err) => {
+          console.log(err.message)
+          throw err
+        })
+  }
+
   async _fetch (url: string, params: any) {
     return await fetch(url, params)
       .then(this.handleError)

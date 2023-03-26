@@ -29,6 +29,17 @@ describe('Cats', () => {
         cy.url().should("include", "/cats")
     })
 
+    it("should edit cat", () => {
+        cy.visit("/cats")
+        cy.get(':nth-child(1) > :nth-child(4) > .btn').click()
+        cy.get('[data-testid="edit-button"]').click()
+        cy.get('input[name="name"]').clear().type("Update Fluffy")
+        cy.get('input[name="description"]').clear().type("An updated cute cat")
+        cy.get('button[type="submit"]').click()
+        cy.contains('table tbody tr td', 'Update Fluffy').should('be.visible')
+        cy.contains('table tbody tr td', 'An updated cute cat').should('be.visible')
+    })
+
   })
 
   export {}

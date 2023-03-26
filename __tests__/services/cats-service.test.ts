@@ -123,5 +123,33 @@ describe('Cats service', () => {
     })
   })
 
+  describe("update", () => {
+    it("should update and return a cat", async () => {
+      setUpFetchSuccessMock([testCat1])
+
+      const result = await getService().update({ cat: testCat1 })
+
+      expect(result).toBeDefined()
+      expect(result.id).toEqual("1")
+      expect(result.name).toEqual("Smelly")
+      expect(result.description).toEqual("Smelly cat")
+      expect(result.group).toEqual("Tabby")
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    it("should throw an error when create fails", async () => {
+      setUpFetchErrorMock("Update error")
+
+      await expect(
+          getService().create({
+            cat: testCat1,
+          })
+      ).rejects.toThrow("Update error")
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+  })
+
 
 })
