@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { Cat } from '@/domain/cat'
-import { Table } from 'react-bootstrap'
+import {Button, Table} from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 
 const service = new CatsService()
@@ -16,6 +16,11 @@ export default function CatPage({ cat } : {cat: Cat} ) {
       </Head>
       <main>
         <h1>Your cat {cat.name}</h1>
+
+        <form action={`/api/cats/${cat.id}/delete`} method="POST">
+          <Button type="submit" variant="danger" className="mb-3" data-testid="delete-button">Delete</Button>
+        </form>
+
         <Table striped bordered hover>
           <tbody>
             <tr>

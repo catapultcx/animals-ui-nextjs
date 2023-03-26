@@ -97,4 +97,31 @@ describe('Cats service', () => {
     })
   })
 
+  describe('delete', () => {
+    it('should delete and return cat', async () => {
+      setUpFetchSuccessMock([testCat1])
+
+      const deleted = await getService().delete({id: '1'})
+
+      expect(deleted).toBeDefined()
+      expect(deleted?.id).toEqual('1')
+      expect(deleted?.name).toEqual('Smelly')
+      expect(deleted?.description).toEqual('Smelly cat')
+      expect(deleted?.group).toEqual('Tabby')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    it('should throw an error when delete fails', async () => {
+      setUpFetchErrorMock('Delete error')
+
+      await expect(getService().delete({id: '1'}))
+          .rejects
+          .toThrow('Delete error')
+
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+  })
+
+
 })
