@@ -39,7 +39,17 @@ describe('Cats', () => {
         cy.contains('table tbody tr td', 'Update Fluffy').should('be.visible')
         cy.contains('table tbody tr td', 'An updated cute cat').should('be.visible')
     })
-
+    
+    it('filters cats by name and description', () => {
+        cy.visit("/cats")
+        cy.get('input[aria-label="name"]').type('Tom')
+        cy.get('input[aria-label="description"]').type('Friend of Jerry')
+        cy.contains('button', 'Filter').click()
+        cy.url().should('include', '/cats?name=Tom&description=Friend+of+Jerry')
+        cy.get('table tbody tr').should('have.length', 1)
+        cy.contains('table tbody tr td', 'Tom').should('be.visible')
+        cy.contains('table tbody tr td', 'Friend of Jerry').should('be.visible')
+    })
   })
 
   export {}

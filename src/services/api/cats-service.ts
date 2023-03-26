@@ -23,8 +23,9 @@ export class CatsService extends BaseAPIService {
     return await this._fetchGET(`${this.baseUrl}/cats/${params.id}`)
   }
 
-  async all(): Promise<{ cats: Cat[] } | null> {
-    return this._fetchGET(`${this.baseUrl}/cats`)
+  async all(filters: {name?: string, description?: string} = {}): Promise<{ cats: Cat[] } | null> {
+    const filtersString = new URLSearchParams(filters).toString()
+    return this._fetchGET(`${this.baseUrl}/cats?${filtersString}`)
   }
 
   async create(params: CreateCommand): Promise<Cat> {
