@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import { Cat } from '@/domain/cat'
-import { Table } from 'react-bootstrap'
+import {Col, Row, Table} from 'react-bootstrap'
 import { CatsService } from '@/services/api/cats-service'
 import Link from 'next/link'
+import { Filter } from "@/components/Filter"
 
 const service = new CatsService()
 
@@ -17,9 +18,18 @@ export default function CatsPage({ cats } : any) {
       </Head>
       <main>
         <h1>View your cats</h1>
-        <Link href="/cats/new" className="btn btn-primary mb-3">
-          Register Cat
-        </Link>
+
+        <Row className="justify-content-between">
+          <Col xs="auto">
+            <Link href="/cats/new" className="btn btn-primary mb-3">
+              Register Cat
+            </Link>
+          </Col>
+          <Col xs="auto">
+            <Filter />
+          </Col>
+        </Row>
+
         <Table striped bordered hover>
           <thead>
             <tr>

@@ -1,8 +1,12 @@
-import CatsPage, { getServerSideProps } from '@/pages/cats/index';
-import { render, screen } from '@testing-library/react';
+import CatsPage, { getServerSideProps } from '@/pages/cats/index'
+import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
-import { testCats } from '__tests__/data';
+import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils'
+import { testCats } from '__tests__/data'
+
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}))
 
 const validContext = {
   req: {},
@@ -50,5 +54,5 @@ describe('Cats Page', () => {
 
     expect(h1).toBeInTheDocument()
     expect(h1.textContent).toBe('View your cats')
-  });
-});
+  })
+})
