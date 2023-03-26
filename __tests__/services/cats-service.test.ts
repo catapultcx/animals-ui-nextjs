@@ -73,13 +73,7 @@ describe('Cats service', () => {
     it("should create and return a cat", async () => {
       setUpFetchSuccessMock([testCat1])
 
-      const result = await getService().create({
-        cat: {
-          name: "Smelly Cat",
-          description: "That's one smelly cat",
-          group: "Tabby",
-        },
-      })
+      const result = await getService().create({ cat: testCat1 })
 
       expect(result).toBeDefined()
       expect(result.id).toEqual("1")
@@ -95,11 +89,7 @@ describe('Cats service', () => {
 
       await expect(
           getService().create({
-            cat: {
-              name: "Smelly Cat",
-              description: "That's one smelly cat",
-              group: "Tabby",
-            },
+            cat: testCat1,
           })
       ).rejects.toThrow("Create error")
 
