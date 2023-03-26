@@ -1,8 +1,8 @@
-import Head from 'next/head'
-import { Cat } from '@/domain/cat'
-import {Col, Row, Table} from 'react-bootstrap'
-import { CatsService } from '@/services/api/cats-service'
-import Link from 'next/link'
+import Head from "next/head"
+import { Cat } from "@/domain/cat"
+import {Col, Row, Table} from "react-bootstrap"
+import { CatsService } from "@/services/api/cats-service"
+import Link from "next/link"
 import { Filter } from "@/components/Filter"
 
 const service = new CatsService()
@@ -47,7 +47,7 @@ export default function CatsPage({ cats } : any) {
                   <td>{c.name}</td>
                   <td>{c.description}</td>
                   <td>
-                    <Link href={`/cats/${c.id}`} className='btn btn-primary btn-auth0-cta btn-padded'>
+                    <Link href={`/cats/${c.id}`} className="btn btn-primary btn-auth0-cta btn-padded">
                       View
                     </Link>
                   </td>
@@ -61,11 +61,15 @@ export default function CatsPage({ cats } : any) {
 }
 
 export async function getServerSideProps(context: any) {
-    try {
-      const cats = await service.all()
-      return { props: { cats } }
-    } catch (err) {
-      console.log(err)
-      return { notFound: true }
-    }
+  try {
+    const queryString = new URLSearchParams(context?.query)
+    const name = queryString.get("name") ?? "";
+    const description = queryString.get("description") ?? "";
+
+    const cats = await service.all({name, description})
+    return { props: { cats } }
+  } catch (err) {
+    console.log(err)
+    return { notFound: true }
+  }
 }
