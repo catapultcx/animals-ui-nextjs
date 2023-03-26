@@ -19,6 +19,16 @@ describe('Cats', () => {
         cy.contains('table tbody tr td', 'A cute cat').should('be.visible')
     })
 
+    it("should delete cat", () => {
+        cy.visit("/cats/new")
+        cy.get('input[name="name"]').type("TEST DELETE")
+        cy.get('input[name="description"]').type("TEST DELETE RECORD")
+        cy.get('button[type="submit"]').click()
+        cy.contains('td', 'TEST DELETE').parent('tr').find('a:contains("View")').click();
+        cy.get('[data-testid="delete-button"]').click()
+        cy.url().should("include", "/cats")
+    })
+
   })
 
   export {}
