@@ -24,7 +24,7 @@ describe('Cats', () => {
         cy.get('input[name="name"]').type("TEST DELETE")
         cy.get('input[name="description"]').type("TEST DELETE RECORD")
         cy.get('button[type="submit"]').click()
-        cy.get(':nth-child(1) > :nth-child(4) > .btn').click()
+        cy.contains('td', 'TEST DELETE').parent('tr').find('a:contains("View")').click();
         cy.get('[data-testid="delete-button"]').click()
         cy.url().should("include", "/cats")
     })
