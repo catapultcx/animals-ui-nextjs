@@ -9,6 +9,16 @@ describe('Cats', () => {
       cy.url().should('include', '/cats')
       cy.get('h1').contains('View your cats')
     })
+
+    it("should create a new cat", () => {
+        cy.visit("/cats/new")
+        cy.get('input[name="name"]').type("Fluffy")
+        cy.get('input[name="description"]').type("A cute cat")
+        cy.get('button[type="submit"]').click()
+        cy.contains('table tbody tr td', 'Fluffy').should('be.visible')
+        cy.contains('table tbody tr td', 'A cute cat').should('be.visible')
+    })
+
   })
 
   export {}

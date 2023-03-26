@@ -17,6 +17,9 @@ export default function CatsPage({ cats } : any) {
       </Head>
       <main>
         <h1>View your cats</h1>
+        <Link href="/cats/new" className="btn btn-primary mb-3">
+          Register Cat
+        </Link>
         <Table striped bordered hover>
           <thead>
             <tr>

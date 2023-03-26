@@ -19,6 +19,7 @@ const customJestConfig = {
     '^@/components/(.*)$': '<rootDir>/src/components/$1',
     '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
     '^@/services/(.*)$': '<rootDir>/src/services/$1',
+    '^@/domain/(.*)$': '<rootDir>/src/domain/$1',
     '^(.*)\\.js$': '$1'
   },
   moduleDirectories: ['node_modules', '<rootDir>'],
