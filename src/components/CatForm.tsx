@@ -13,9 +13,7 @@ type Props = {
 };
 
 const CreateAnimalPage = ({ cat, editMode }: Props) => {
-	const [catData, setCat] = useState<{ name: string; description: string }>(
-		cat ? { name: cat.name, description: cat.description } : { name: "", description: "" }
-	);
+	const [catData, setCat] = useState<Cat>(cat ? { id: cat.id, name: cat.name, description: cat.description } : { name: "", description: "" });
 	const [formValidated, setFormValidated] = useState(false);
 	const [catCreated, setCatCreated] = useState<boolean>(false);
 	const [catUpdated, setCatUpdated] = useState<boolean>(false);
@@ -72,7 +70,12 @@ const CreateAnimalPage = ({ cat, editMode }: Props) => {
 				</Alert>
 			)}
 			<div className="container my-5">
-				<Form noValidate validated={formValidated} onSubmit={handleSubmit} action={`${process.env.API_URL}/cats`} method="POST">
+				<Form
+					noValidate
+					validated={formValidated}
+					onSubmit={handleSubmit}
+					action={`${process.env.API_URL}/cats/form${editMode && `/${catData.id}`}`}
+					method="POST">
 					<Form.Group controlId="formName">
 						<Form.Label>Name</Form.Label>
 						<Form.Control required type="text" name="name" value={catData.name} onChange={handleInputChange} />

@@ -3,7 +3,7 @@ import { Cat } from "@/domain/cat";
 import { Alert, Button, Form, Table } from "react-bootstrap";
 import { CatsService } from "@/services/api/cats-service";
 import Link from "next/link";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { useRouter } from "next/router";
 
 const service = new CatsService();
@@ -61,10 +61,10 @@ export default function CatsPage({ cats }: any) {
 					</Alert>
 				)}
 
-				<Form onSubmit={handleNameSearch} className="mb-4">
+				<Form onSubmit={handleNameSearch} className="mb-4" action="/cats" method="GET">
 					<Form.Group controlId="formBasicName">
 						<Form.Label>Name</Form.Label>
-						<Form.Control type="text" placeholder="Enter name" value={name} onChange={(e) => setName(e.target.value)} />
+						<Form.Control type="text" placeholder="Enter name" name="name" value={name} onChange={(e) => setName(e.target.value)} />
 					</Form.Group>
 					<Button variant="primary" className="mt-2" type="submit">
 						Search by Name
@@ -77,6 +77,7 @@ export default function CatsPage({ cats }: any) {
 							type="text"
 							placeholder="Enter description"
 							value={description}
+							name="description"
 							onChange={(e) => setDescription(e.target.value)}
 						/>
 					</Form.Group>
@@ -85,7 +86,7 @@ export default function CatsPage({ cats }: any) {
 					</Button>
 				</Form>
 
-				<Button variant="success" className="mb-2" type="submit" onClick={handleResetFilters}>
+				<Button href="/cats" variant="success" className="mb-2" type="submit" onClick={handleResetFilters}>
 					Reset Filters
 				</Button>
 				<Table striped bordered hover>
@@ -112,8 +113,9 @@ export default function CatsPage({ cats }: any) {
 										</Link>
 									</td>
 									<td>
-										<form onSubmit={handleDelete}>
+										<form onSubmit={handleDelete} action={`${process.env.API_URL}/cats/form/${c.id}`} method="POST">
 											<input type="hidden" name="id" value={c.id} />
+											<input type="hidden" name="_method" value="DELETE" />
 											<Button className="btn btn-danger btn-auth0-cta btn-padded" type="submit">
 												Delete
 											</Button>
