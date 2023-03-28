@@ -2,7 +2,7 @@ export abstract class BaseAPIService {
   baseUrl: string
 
   constructor () {
-    this.baseUrl = `${process.env.API_URL}`
+    this.baseUrl = 'http://localhost:8080/api/1'
   }
 
   handleError (response: any) {
@@ -25,4 +25,27 @@ export abstract class BaseAPIService {
         throw err
       })
   }
+
+  async _fetchPost(url: string, data: any) {
+    return await this._fetch(url, {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  }
+
+  async _fetchPut(url: string, data: any) {
+    return await this._fetch(url, {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  }
+
+  async _fetchDelete(url: string) {
+    return await this._fetch(url, {
+      method: "delete",
+    });
+  }
+
 }
