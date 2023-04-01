@@ -3,12 +3,14 @@ import { Cat } from '@/domain/cat';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { CatsService } from '@/services/api/cats-service';
 import Link from 'next/link';
-import router from 'next/router';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const service = new CatsService();
 
 export default function CatsPage({ cats }: any) {
+  const router = useRouter();
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [searchResults, setSearchResults] = useState(cats);

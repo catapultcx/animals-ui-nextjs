@@ -1,6 +1,7 @@
 import { CatsService } from '@/services/api/cats-service';
-import { testCat1, testCats } from '../data';
+import { testCat1, testCat2, testCats } from '../data';
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '../utils';
+import { Cat } from '@/domain/cat';
 
 // https://github.com/facebook/jest/issues/13834
 // https://github.com/jsdom/jsdom/issues/1724
@@ -112,6 +113,21 @@ describe('Cats service', () => {
       const updated = await getService().update(testCat1);
       expect(updated.name).toEqual('Smelly updated');
       expect(updated.description).toEqual('Smelly cat updated');
+    });
+  });
+
+  describe('search cat', () => {
+    it('should search cats successfully', async () => {
+      setUpFetchSuccessMock([testCats]);
+
+      const updated = await getService().all();
+      expect(updated?.length).toEqual(2);
+
+      setUpFetchSuccessMock(testCat2);
+      const cat: Cat = await getService().search('Garfield', '');
+
+      expect(cat.name).toEqual('Garfield');
+      expect(cat.description).toEqual('Lazy cat');
     });
   });
 });

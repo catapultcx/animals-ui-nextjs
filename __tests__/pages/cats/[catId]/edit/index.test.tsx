@@ -3,6 +3,7 @@ import '@testing-library/jest-dom';
 import { testCat1 } from '__tests__/data';
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
 import EditCat, { getServerSideProps } from '@/pages/cats/[catId]/edit';
+import { useRouter } from 'next/router';
 
 const validContext = {
   params: { catId: '1' },
@@ -14,6 +15,10 @@ const contextMissingParams = {
   req: {},
   res: {},
 };
+
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(),
+}));
 
 describe('Cat Page', () => {
   beforeEach(() => {
@@ -44,11 +49,16 @@ describe('Cat Page', () => {
   });
 
   it('should render without crashing', () => {
+    const handleOnEdit = jest.fn();
+    useRouter.mockReturnValue({
+      push: () => handleOnEdit,
+    });
+
     render(<EditCat cat={testCat1} />);
 
     const h1 = screen.getByRole('heading', { level: 1 });
 
     expect(h1).toBeInTheDocument();
-    expect(h1.textContent).toBe('Your cat Smelly');
+    expect(h1.textContent).toBe('Edit Cat');
   });
 });
