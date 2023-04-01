@@ -19,6 +19,6 @@ export class CatsService extends BaseAPIService {
       name,
       description,
     };
-    return this._fetchPOST(`${this.baseUrl}/cat`, cat);
+    return this._fetchPOST(`${this.baseUrl}/cats`, cat);
   };
 }

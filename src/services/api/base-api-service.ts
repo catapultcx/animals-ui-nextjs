@@ -17,10 +17,16 @@ export abstract class BaseAPIService {
     return await this._fetch(url, {});
   }
 
-  _fetchPOST = async (url: string, body: any) => {
+  _fetchPOST = async (url: string, data: any) => {
     const params = {
       method: 'POST',
-      body: JSON.stringify(body),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+      mode: 'cors',
+      body: JSON.stringify(data),
     };
     return await this._fetch(url, params);
   };
