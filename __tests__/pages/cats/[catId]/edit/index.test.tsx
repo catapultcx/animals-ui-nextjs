@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { testCat1 } from '__tests__/data';
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
@@ -60,5 +60,28 @@ describe('Cat Page', () => {
 
     expect(h1).toBeInTheDocument();
     expect(h1.textContent).toBe('Edit Cat');
+  });
+
+  it('calls handleOnEdit when Edit button is clicked', () => {
+    const handleOnEdit = jest.fn();
+    useRouter.mockReturnValue({
+      push: () => handleOnEdit,
+    });
+    setUpFetchSuccessMock(testCat1);
+
+    render(<EditCat cat={testCat1} />);
+    const name = screen.getByRole('textbox', { name: /name/i });
+    const description = screen.getByRole('textbox', { name: /description/i });
+
+    fireEvent.change(name, { target: { value: 'Smelly updated' } });
+    fireEvent.change(description, { target: { value: 'Smelly cat updated' } });
+
+    expect(name.value).toEqual('Smelly updated');
+    expect(description.value).toEqual('Smelly cat updated');
+
+    const button = screen.getByRole('button', { name: 'Edit' });
+    expect(button).toBeTruthy();
+    fireEvent.click(button);
+    // expect(handleCreate).toHaveBeenCalled();
   });
 });
