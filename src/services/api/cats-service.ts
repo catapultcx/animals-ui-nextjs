@@ -25,4 +25,8 @@ export class CatsService extends BaseAPIService {
   async delete(id: string): Promise<boolean | null> {
     return await this._fetchDELETE(`${this.baseUrl}/cats/${id}`);
   }
+
+  async update(cat: Cat): Promise<any> {
+    return await this._fetchPUT(`${this.baseUrl}/cats/update`, cat);
+  }
 }

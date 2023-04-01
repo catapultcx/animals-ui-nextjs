@@ -37,6 +37,19 @@ export abstract class BaseAPIService {
     });
   }
 
+  async _fetchPUT(url: string, data: any) {
+    const params = {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      body: JSON.stringify(data),
+    };
+    return await this._fetch(url, params);
+  }
+
   async _fetch(url: string, params: any) {
     return await fetch(url, params)
       .then(this.handleError)

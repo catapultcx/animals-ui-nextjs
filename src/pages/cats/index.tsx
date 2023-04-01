@@ -54,6 +54,12 @@ export default function CatsPage({ cats }: any) {
                     >
                       View
                     </Link>{' '}
+                    <Link
+                      href={`/cats/${c.id}/edit`}
+                      className="btn btn-primary btn-auth0-cta btn-padded"
+                    >
+                      Edit
+                    </Link>{' '}
                     <Button
                       variant="danger"
                       type="button"
