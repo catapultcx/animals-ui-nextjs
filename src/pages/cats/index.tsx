@@ -1,12 +1,12 @@
-import Head from 'next/head'
-import { Cat } from '@/domain/cat'
-import { Table } from 'react-bootstrap'
-import { CatsService } from '@/services/api/cats-service'
-import Link from 'next/link'
+import Head from 'next/head';
+import { Cat } from '@/domain/cat';
+import { Button, Table } from 'react-bootstrap';
+import { CatsService } from '@/services/api/cats-service';
+import Link from 'next/link';
 
-const service = new CatsService()
+const service = new CatsService();
 
-export default function CatsPage({ cats } : any) {
+export default function CatsPage({ cats }: any) {
   return (
     <>
       <Head>
@@ -16,6 +16,12 @@ export default function CatsPage({ cats } : any) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Link
+          href={`/cat`}
+          className="btn btn-primary btn-auth0-cta btn-padded"
+        >
+          Add Cat
+        </Link>
         <h1>View your cats</h1>
         <Table striped bordered hover>
           <thead>
@@ -27,32 +33,35 @@ export default function CatsPage({ cats } : any) {
             </tr>
           </thead>
           <tbody>
-            {cats?.length > 0 &&             
+            {cats?.length > 0 &&
               cats.map((c: Cat) => (
                 <tr key={c.id}>
                   <td>{c.id}</td>
                   <td>{c.name}</td>
                   <td>{c.description}</td>
                   <td>
-                    <Link href={`/cats/${c.id}`} className='btn btn-primary btn-auth0-cta btn-padded'>
+                    <Link
+                      href={`/cats/${c.id}`}
+                      className="btn btn-primary btn-auth0-cta btn-padded"
+                    >
                       View
                     </Link>
                   </td>
-                </tr>                
+                </tr>
               ))}
           </tbody>
         </Table>
       </main>
     </>
-  )
+  );
 }
 
 export async function getServerSideProps(context: any) {
-    try {
-      const cats = await service.all()
-      return { props: { cats } }
-    } catch (err) {
-      console.log(err)
-      return { notFound: true }
-    }
+  try {
+    const cats = await service.all();
+    return { props: { cats } };
+  } catch (err) {
+    console.log(err);
+    return { notFound: true };
+  }
 }
