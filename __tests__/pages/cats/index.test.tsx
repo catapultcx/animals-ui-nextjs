@@ -60,7 +60,7 @@ describe('Cats Page', () => {
     expect(h1.textContent).toBe('View your cats');
   });
 
-  xit('should render Delete button', async () => {
+  it('should render Delete button', async () => {
     setUpFetchSuccessMock([testCats]);
     const handleDelete = jest.fn();
     useRouter.mockReturnValue({
