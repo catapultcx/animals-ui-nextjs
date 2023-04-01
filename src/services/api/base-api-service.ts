@@ -31,6 +31,12 @@ export abstract class BaseAPIService {
     return await this._fetch(url, params);
   };
 
+  async _fetchDELETE(url: string) {
+    return await this._fetch(url, {
+      method: 'DELETE',
+    });
+  }
+
   async _fetch(url: string, params: any) {
     return await fetch(url, params)
       .then(this.handleError)

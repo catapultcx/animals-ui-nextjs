@@ -3,10 +3,18 @@ import { Cat } from '@/domain/cat';
 import { Button, Table } from 'react-bootstrap';
 import { CatsService } from '@/services/api/cats-service';
 import Link from 'next/link';
+import router from 'next/router';
 
 const service = new CatsService();
 
 export default function CatsPage({ cats }: any) {
+  const handleDelete = async (id: string) => {
+    const result = await service.delete(id);
+    if (result) {
+      router.push('/cats');
+    }
+  };
+
   return (
     <>
       <Head>
@@ -47,7 +55,14 @@ export default function CatsPage({ cats }: any) {
                       className="btn btn-primary btn-auth0-cta btn-padded"
                     >
                       View
-                    </Link>
+                    </Link>{' '}
+                    <Button
+                      variant="danger"
+                      type="button"
+                      onClick={(e) => handleDelete(`${c.id}`)}
+                    >
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               ))}
