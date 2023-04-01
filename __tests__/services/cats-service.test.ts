@@ -103,4 +103,15 @@ describe('Cats service', () => {
       expect(fetch).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('update cat', () => {
+    it('should update a cat successfully', async () => {
+      setUpFetchSuccessMock([testCat1]);
+      testCat1.name = testCat1.name + ' updated';
+      testCat1.description = testCat1.description + ' updated';
+      const updated = await getService().update(testCat1);
+      expect(updated.name).toEqual('Smelly updated');
+      expect(updated.description).toEqual('Smelly cat updated');
+    });
+  });
 });
