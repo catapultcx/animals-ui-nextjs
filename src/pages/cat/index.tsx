@@ -3,18 +3,22 @@ import { Cat } from '@/domain/cat';
 import { Button, Form, Table } from 'react-bootstrap';
 import { CatsService } from '@/services/api/cats-service';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const service = new CatsService();
 
 export default function CreateCatPage() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const router = useRouter();
 
   const handleCreate = async () => {
     console.log(name, description);
 
     const created = await service.create(name, description);
-    console.log(created);
+    if (created) {
+      router.push('/');
+    }
   };
 
   return (
@@ -33,15 +37,19 @@ export default function CreateCatPage() {
             <Form.Control
               type="text"
               placeholder="Enter cat name"
+              name="name"
               onChange={(e) => setName(e.target.value)}
+              data-testid="name"
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="description">
             <Form.Label>Description</Form.Label>
             <Form.Control
               type="text"
+              name="description"
               placeholder="Enter cat description"
               onChange={(e) => setDescription(e.target.value)}
+              data-testid="description"
             />
           </Form.Group>
           <Button variant="primary" type="button" onClick={handleCreate}>

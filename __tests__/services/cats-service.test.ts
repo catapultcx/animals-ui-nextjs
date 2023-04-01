@@ -76,9 +76,8 @@ describe('Cats service', () => {
       );
 
       expect(results).toBeDefined();
-      expect(results?.length).toEqual(1);
-      expect(results[0].id).toEqual('1');
-      expect(results[0].name).toEqual('Smelly');
+      expect(results.id).toEqual('1');
+      expect(results.name).toEqual('Smelly');
 
       expect(fetch).toHaveBeenCalledTimes(1);
     });
