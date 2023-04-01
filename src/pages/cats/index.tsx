@@ -22,6 +22,8 @@ export default function CatsPage({ cats }: any) {
         >
           Add Cat
         </Link>
+        <br />
+        <br />
         <h1>View your cats</h1>
         <Table striped bordered hover>
           <thead>
