@@ -1,13 +1,23 @@
 import Head from 'next/head';
 import { Cat } from '@/domain/cat';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { CatsService } from '@/services/api/cats-service';
 import Link from 'next/link';
 import router from 'next/router';
+import { useState } from 'react';
 
 const service = new CatsService();
 
 export default function CatsPage({ cats }: any) {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [searchResults, setSearchResults] = useState(cats);
+
+  const handleSearch = async () => {
+    const results = await service.search(name, description);
+    setSearchResults(results);
+  };
+
   const handleDelete = async (id: string) => {
     const result = await service.delete(id);
     router.push('/');
@@ -30,6 +40,36 @@ export default function CatsPage({ cats }: any) {
         </Link>
         <br />
         <br />
+        {/* Search filters */}
+        <Form>
+          <Row>
+            <Col>
+              <Form.Control
+                type="text"
+                value={name}
+                placeholder="Enter cat name to search"
+                onChange={(e) => setName(e.target.value)}
+                data-testid="name"
+              />
+            </Col>
+            <Col>
+              <Form.Control
+                type="text"
+                value={description}
+                placeholder="Enter cat description to search"
+                onChange={(e) => setDescription(e.target.value)}
+                data-testid="description"
+              />
+            </Col>
+            <Col xs="auto">
+              <Button variant="primary" type="button" onClick={handleSearch}>
+                Search
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+        <br />
+
         <h1>View your cats</h1>
         <Table striped bordered hover>
           <thead>
@@ -41,8 +81,8 @@ export default function CatsPage({ cats }: any) {
             </tr>
           </thead>
           <tbody>
-            {cats?.length > 0 &&
-              cats.map((c: Cat) => (
+            {searchResults?.length > 0 &&
+              searchResults.map((c: Cat) => (
                 <tr key={c.id}>
                   <td>{c.id}</td>
                   <td>{c.name}</td>

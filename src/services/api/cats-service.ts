@@ -29,4 +29,12 @@ export class CatsService extends BaseAPIService {
   async update(cat: Cat): Promise<any> {
     return await this._fetchPUT(`${this.baseUrl}/cats/update`, cat);
   }
+
+  async search(name: string, description: string): Promise<any> {
+    const cat: Cat = {
+      name,
+      description,
+    };
+    return await this._fetchPOST(`${this.baseUrl}/cats/search`, cat);
+  }
 }
