@@ -1,54 +1,78 @@
 import CatsPage, { getServerSideProps } from '@/pages/cats/index';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom'
+import { fireEvent, render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { setUpFetchErrorMock, setUpFetchSuccessMock } from '__tests__/utils';
 import { testCats } from '__tests__/data';
+import { useRouter } from 'next/router';
 
 const validContext = {
   req: {},
-  res: {}
-}
+  res: {},
+};
 
 const contextMissingParams = {
   req: {},
-  res: {}
-}
+  res: {},
+};
+
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(),
+}));
 
 describe('Cats Page', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-    jest.restoreAllMocks()
-  })
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
 
   it('getServerSideProps should return account property for valid context', async () => {
-    setUpFetchSuccessMock([testCats])
+    setUpFetchSuccessMock([testCats]);
 
-    const response = await getServerSideProps(validContext as any)
+    const response = await getServerSideProps(validContext as any);
 
     expect(response).toEqual({
       props: {
-        cats: testCats
-      }
-    })
-    expect(fetch).toHaveBeenCalledTimes(1)
-  })
+        cats: testCats,
+      },
+    });
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
 
   it('getServerSideProps should return not found for any fetch error', async () => {
-    setUpFetchErrorMock('Not found')
+    setUpFetchErrorMock('Not found');
 
-    const response = await getServerSideProps(contextMissingParams as any)
+    const response = await getServerSideProps(contextMissingParams as any);
 
-    expect(response).toEqual({ notFound: true })
-    expect(fetch).toHaveBeenCalledTimes(1)
-  })
-
+    expect(response).toEqual({ notFound: true });
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
 
   it('should render without crashing', () => {
-    render(<CatsPage cats={testCats}/>)
+    const handleDelete = jest.fn();
+    useRouter.mockReturnValue({
+      push: () => handleDelete,
+    });
+    render(<CatsPage cats={testCats} />);
 
-    const h1 = screen.getByRole('heading', { level: 1 })
+    const h1 = screen.getByRole('heading', { level: 1 });
 
-    expect(h1).toBeInTheDocument()
-    expect(h1.textContent).toBe('View your cats')
+    expect(h1).toBeInTheDocument();
+    expect(h1.textContent).toBe('View your cats');
+  });
+
+  xit('should render Delete button', async () => {
+    setUpFetchSuccessMock([testCats]);
+    const handleDelete = jest.fn();
+    useRouter.mockReturnValue({
+      push: () => handleDelete,
+    });
+
+    render(<CatsPage cats={testCats} />);
+
+    const deleteButton = screen.getAllByText('Delete')[0];
+    expect(deleteButton).toBeInTheDocument();
+    expect(deleteButton.textContent).toBe('Delete');
+    fireEvent.click(deleteButton);
+    // expect(handleDelete).toHaveBeenCalledTimes(1);
   });
 });

@@ -10,9 +10,7 @@ const service = new CatsService();
 export default function CatsPage({ cats }: any) {
   const handleDelete = async (id: string) => {
     const result = await service.delete(id);
-    if (result) {
-      router.push('/cats');
-    }
+    router.push('/');
   };
 
   return (

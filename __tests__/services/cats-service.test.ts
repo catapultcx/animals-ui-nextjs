@@ -82,4 +82,25 @@ describe('Cats service', () => {
       expect(fetch).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('delete', () => {
+    it('should delete a cat for the given cat id', async () => {
+      setUpFetchSuccessMock([testCat1]);
+
+      const found = await getService().delete(testCat1.id);
+
+      expect(found).toBeDefined();
+      expect(found).toBeTruthy();
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('delete should throw an error for invalid id', async () => {
+      setUpFetchErrorMock('Not found');
+
+      await expect(getService().delete('0')).rejects.toThrow('Not found');
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+    });
+  });
 });
